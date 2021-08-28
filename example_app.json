@@ -1,0 +1,58 @@
+{
+    "variables":[
+        {
+            "name":"MyString32",
+            "description":"My string variable (maxlen 32)",
+            "type":"String32",
+            "initial":"Hello World"
+        },
+        {
+            "name":"MyString64",
+            "description":"My string variable (maxlen 64)",
+            "type":"String64",
+            "initial":"Hello World"
+        },
+        {
+            "name":"MyString128",
+            "description":"My string variable (maxlen 128)",
+            "type":"String128",
+            "initial":"Hello World"
+        },
+        {
+            "name":"MyUInt8",
+            "description":"My Byte variable",
+            "type":"UInt8",
+            "initial":"8"
+        },
+        {
+            "name":"MyInt8",
+            "description":"My integer 8-bit variable",
+            "type":"Int8",
+            "initial":"-8"
+        },
+        {
+            "name":"MyUInt16",
+            "description":"My unsigned integer 16-bit variable",
+            "type":"UInt16",
+            "initial":"16"
+        },
+        {
+            "name":"MyInt16",
+            "description":"My integer 16-bit variable",
+            "type":"Int16",
+            "initial":"-16"
+        },
+        {
+            "name":"MyUInt32",
+            "description":"My unsigned integer 32-bit variable",
+            "type":"UInt32",
+            "initial":"32"
+        },
+        {
+            "name":"MyInt32",
+            "description":"My integer 32-bit variable",
+            "type":"Int32",
+            "initial":"-32"
+        }
+    ]
+}

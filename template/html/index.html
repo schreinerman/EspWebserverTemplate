@@ -1,0 +1,134 @@
+<html>
+<head>
+    <!-- meta http-equiv='refresh' content='5'/-->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <meta name="apple-itunes-app" content="app-id=1547859811">
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="theme-color" content="#ffffff">
+
+    <title>My ESP WebServer</title>
+    <script>
+    function execcmd(cmd,val) {
+        fetch('/cmd/' + cmd + '/' + val);
+    }
+    function requestFullScreen() {
+        const _element = document.documentElement;
+        if (_element.requestFullscreen) {
+           _element.requestFullscreen();
+        } else {
+        if (_element.mozRequestFullScreen) {
+           _element.mozRequestFullScreen();
+        } else {
+           if (_element.webkitRequestFullscreen) {
+              _element.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
+           }
+        }
+      }
+    }
+    var tapedTwice = false;
+
+    function tapHandler(event) {
+        if(!tapedTwice) {
+            tapedTwice = true;
+            setTimeout( function() { tapedTwice = false; }, 300 );
+            return false;
+        }
+        event.preventDefault();
+    }
+
+    function blockMove() {
+          event.preventDefault() ;
+    }
+
+    function handleKeepAlive()
+    {
+        let overlay = document.getElementById("overlay");
+        fetch('/cmd/keepalive')
+        .then(data => {          
+            console.log('Success:', data);
+            if (data.ok)
+            {
+                overlay.style.display = "none";               
+            } else
+            {
+                overlay.style.display = "block";
+            }
+        })
+        .catch((error) => {
+            let overlay = document.getElementById("overlay");
+            console.log('Error:', error);
+            overlay.style.display = "block";
+        });
+    }
+
+    window.setTimeout(function() {
+        requestFullScreen();
+    },1000);
+
+    window.setInterval(function() {
+        handleKeepAlive();
+    },5000);
+
+    window.setTimeout(function() {
+        handleKeepAlive();
+        requestFullScreen();
+    },100);
+
+    window.addEventListener('resize', function() {
+       let logo = document.getElementById("logo");
+       let main = document.getElementById("main");
+       if ((window.innerHeight / main.clientHeight) < 1.6)
+       {
+        logo.style.display = "none"; 
+       } else
+       {
+        logo.style.display = "block"; 
+       }
+    });
+    
+    </script>
+    <link rel="stylesheet" href="site.css">
+</head>
+<body ontouchmove="blockMove()" ontouchstart="tapHandler">
+        <div class="bar">
+            <div class="topcornerleft">
+                <img style="margin-top: -2px" src="favicon-32x32.png">
+            </div>
+            <div class="title"><script>document.write(document.title);</script></div>
+            <div class="topcorner">
+                <a href="/config/">
+                    <svg class=mdi-icon-32 viewBox="0 0 32 32">
+                        <path fill="#1189DC" d="M12,15.5A3.5,3.5 0 0,1 8.5,12A3.5,3.5 0 0,1 12,8.5A3.5,3.5 0 0,1 15.5,12A3.5,3.5 0 0,1 12,15.5M19.43,12.97C19.47,12.65 19.5,12.33 19.5,12C19.5,11.67 19.47,11.34 19.43,11L21.54,9.37C21.73,9.22 21.78,8.95 21.66,8.73L19.66,5.27C19.54,5.05 19.27,4.96 19.05,5.05L16.56,6.05C16.04,5.66 15.5,5.32 14.87,5.07L14.5,2.42C14.46,2.18 14.25,2 14,2H10C9.75,2 9.54,2.18 9.5,2.42L9.13,5.07C8.5,5.32 7.96,5.66 7.44,6.05L4.95,5.05C4.73,4.96 4.46,5.05 4.34,5.27L2.34,8.73C2.21,8.95 2.27,9.22 2.46,9.37L4.57,11C4.53,11.34 4.5,11.67 4.5,12C4.5,12.33 4.53,12.65 4.57,12.97L2.46,14.63C2.27,14.78 2.21,15.05 2.34,15.27L4.34,18.73C4.46,18.95 4.73,19.03 4.95,18.95L7.44,17.94C7.96,18.34 8.5,18.68 9.13,18.93L9.5,21.58C9.54,21.82 9.75,22 10,22H14C14.25,22 14.46,21.82 14.5,21.58L14.87,18.93C15.5,18.67 16.04,18.34 16.56,17.94L19.05,18.95C19.27,19.03 19.54,18.95 19.66,18.73L21.66,15.27C21.78,15.05 21.73,14.78 21.54,14.63L19.43,12.97Z" />
+                    </svg>
+                </a>
+            </div>
+        </div>
+        <div id="logo" style="margin-top:10px; height:25%; background-image: url(irtrain.png); background-repeat: no-repeat;
+        background-size: contain;" ></div>
+        <div id="main" class=main>
+        <center>
+            <p>
+                Hello World
+            </p>
+            <p> 
+                
+            </p>
+        </center>
+    </div>
+    <div id="overlay">
+        <div class="loader"></div>
+    </div>
+</body>
+</html>
+

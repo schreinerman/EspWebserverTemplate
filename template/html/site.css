@@ -1,0 +1,184 @@
+body {
+background-color: #000000;
+font-family: Arial, Helvetica, Sans-Serif;
+Color: #000088;
+background-image: url(steinplatte.jpg);
+max-width:100vw;
+margin: 0px;
+}
+
+button {
+width: 15%;
+height: 10%;
+box-sizing: border-box;
+margin: 0.5rem auto;
+padding: 0.75rem;
+font-size: 0.75rem;
+text-align: center;
+text-transform: uppercase;
+color: #1189DC;
+border: 2px solid #aaaaaa;
+background: #666666;
+border-radius: 0.5rem;
+outline: none;
+user-select: none;
+cursor: pointer;
+}
+.formular {
+margin: 0.5em auto;
+width:300px;
+padding: 0.75rem;
+font-size: 0.75rem;
+color: #aaaaaa;
+background: #474747;
+border: 2px solid #aaaaaa;
+border-radius: 0.5rem;
+outline: none;
+}
+.formular, td {
+font-size: 1rem;
+color: #aaaaaa;
+margin-top:20px; 
+}
+input[type=text] {
+padding:5px; 
+border:1px solid #ccc; 
+-webkit-border-radius: 5px;
+border-radius: 5px;
+font-size: 1rem;
+}
+input[type=text]:focus {
+border-color:#333;
+}
+input[type=submit], input[type=file] {
+margin: 0.5rem auto;
+padding: 0.75rem;
+font-size: 1rem;
+background:#ccc; 
+border:0 none;
+cursor:pointer;
+-webkit-border-radius: 5px;
+border-radius: 5px; 
+-webkit-appearance: none;
+}
+a.button {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    margin: 0.5rem auto;
+    padding: 0.75rem;
+    font-size: 1rem;
+    background:#ccc; 
+    border:0 none;
+    cursor:pointer;
+    -webkit-border-radius: 5px;
+    border-radius: 5px; 
+    text-decoration: none;
+    color: #000000;
+}
+button:active {
+transform: translateY(0.125rem);
+background:#444444;
+}
+.tab {
+width:12%;
+height:100%;
+float: left;
+cursor: pointer;
+}
+.tab label {
+background: #666666; 
+padding: 15px; 
+border: 2px solid #aaaaaa; 
+margin-left: -2px; 
+position: relative;
+left: 1px; 
+border-radius: 0.1rem;
+cursor: pointer;
+color: #1189DC;
+}
+.tab [type=radio] {
+display: none;   
+cursor: pointer;
+}
+[type=radio]:checked ~ label {
+background:  #1189DC;
+z-index: 2;
+cursor: pointer;
+color: #666666;
+}
+[type=radio]:checked ~ label ~ .content {
+z-index: 1;
+cursor: pointer;
+}
+.mdi-icon {
+width:24px;height:24px;color: #1189DC;
+}
+.mdi-icon-32 {
+width:32px;height:32px;color: #1189DC;
+}
+.bar {
+background-color:#333333; 
+width:100%; 
+height:42px;
+top:0px;
+left:0px;
+}
+.main {
+position: absolute; 
+top:45%;
+padding-top: 10px;
+left:10px;
+right:10px;
+}
+.loader {
+position: relative;
+border: 12px solid #000000;
+border-radius: 50%;
+border-top: 12px solid #3498db;
+width: 50px;
+height: 50px;
+margin: auto;
+top:50%;
+-webkit-animation: spin 1s linear infinite; /* Safari */
+animation: spin 1s linear infinite;
+}
+#overlay{
+position: absolute;
+top:0px;
+left:0px;
+width: 100%;
+height: 100%;
+background: #333333;
+opacity: .8;
+z-index: 3;
+}
+/* Safari */
+@-webkit-keyframes spin {
+0% { -webkit-transform: rotate(0deg); }
+100% { -webkit-transform: rotate(360deg); }
+}
+@keyframes spin {
+0% { transform: rotate(0deg); }
+100% { transform: rotate(360deg); }
+}
+.title{
+top:10px;
+margin: auto;
+padding-top: 10px;
+color: #1189DC;
+font-size: 1rem;
+width:200px;
+font-weight:bold;
+text-align: center;
+}
+.topcorner{
+position:absolute;
+top:8px;
+right:10px;
+}
+.topcornerleft {
+position:absolute;
+top:8px;
+left:10px;
+}
