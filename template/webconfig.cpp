@@ -175,8 +175,9 @@ static String typeToString(en_webconfig_type_t type, uint8_t* pu8Data, int* ppos
 static void setValue(int index,char* value)
 {
   int dataPos = 0;
-  int tmp;
-
+  int32_t tmp;
+  uint32_t utmp;
+  
   for (int i = 0; i < index;i++)
   {
     typeToString(pstcWebConfig->astcData[i].type, pstcWebConfig->pu8Data, &dataPos);
@@ -209,12 +210,12 @@ static void setValue(int index,char* value)
        *((int16_t*)&pstcWebConfig->pu8Data[dataPos]) = tmp;
        return;
     case enWebConfigTypeUInt32:
-       sscanf(value,"%d",&tmp);
-       *((uint32_t*)&pstcWebConfig->pu8Data[dataPos]) = tmp;
+       sscanf(value,"%lo",&utmp);
+       memcpy(&pstcWebConfig->pu8Data[dataPos],(uint8_t*)&utmp,4);
        return;
     case enWebConfigTypeInt32:
-       sscanf(value,"%d",&tmp);
-       *((int32_t*)&pstcWebConfig->pu8Data[dataPos]) = tmp;
+       sscanf(value,"%ld",&tmp);
+       memcpy(&pstcWebConfig->pu8Data[dataPos],(uint8_t*)&tmp,4);
        return;
   }
 }

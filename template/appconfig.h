@@ -85,7 +85,7 @@
  *******************************************************************************
  */
 
-typedef struct stc_appconfig
+typedef struct __attribute__((__packed__)) stc_appconfig
 {
   char ssidStation[32];
   char passwordStation[32];

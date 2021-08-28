@@ -94,8 +94,8 @@
  *******************************************************************************
  */
     
-const char *ssidAp = "MyEspConfigAp";
-const char *passwordAp = "MyEspConfigAp";
+const char *ssidAp = "MyEspConfigAP";
+const char *passwordAp = "MyEspConfigAP";
 const char *hostName = "my-esp";
 
 static int minsLast = 0;
