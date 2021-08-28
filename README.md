@@ -2,7 +2,9 @@
 
 This project generates a new Arduino project containing everything for a simple WebServer application.
 
-In the file named `example_app.json` there are already some hints, how to specify variables which can be configured via webinterface.
+You can use ESP32 or ESP8266.
+
+In the file named `example_app.json` is containing already some hints, how to specify variables which can be configured via webinterface.
 
 To create a new Arduino project `myfirstwebserver` following steps are required:
 ```
