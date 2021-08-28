@@ -194,23 +194,23 @@ static void setValue(int index,char* value)
        strncpy((char*)&pstcWebConfig->pu8Data[dataPos],value,128);
        return;
     case enWebConfigTypeUInt8:
-       sscanf(value,"%d",&tmp);
+       sscanf(value,"%ld",&tmp);
        *((uint8_t*)&pstcWebConfig->pu8Data[dataPos]) = tmp;
        return;
     case enWebConfigTypeInt8:
-       sscanf(value,"%d",&tmp);
+       sscanf(value,"%ld",&tmp);
        *((int8_t*)&pstcWebConfig->pu8Data[dataPos]) = tmp;
        return;
     case enWebConfigTypeUInt16:
-       sscanf(value,"%d",&tmp);
+       sscanf(value,"%ld",&tmp);
        *((uint16_t*)&pstcWebConfig->pu8Data[dataPos]) = tmp;
        return;
     case enWebConfigTypeInt16:
-       sscanf(value,"%d",&tmp);
+       sscanf(value,"%ld",&tmp);
        *((int16_t*)&pstcWebConfig->pu8Data[dataPos]) = tmp;
        return;
     case enWebConfigTypeUInt32:
-       sscanf(value,"%lo",&utmp);
+       sscanf(value,"%lu",&utmp);
        memcpy(&pstcWebConfig->pu8Data[dataPos],(uint8_t*)&utmp,4);
        return;
     case enWebConfigTypeInt32:
