@@ -79,6 +79,10 @@
 #define INITIAL_SSID_STATION_MODE "MyWifi"
 #define INITIAL_PASSORD_STATION_MODE "MyPassword"
 
+#define INITIAL_WWW_NAME "admin"
+#define INITIAL_WWW_PASS "admin"
+
+
 /**
  *******************************************************************************
  ** Global type definitions ('typedef') 
@@ -89,6 +93,8 @@ typedef struct __attribute__((__packed__)) stc_appconfig
 {
   char ssidStation[32];
   char passwordStation[32];
+  char wwwUser[32];
+  char wwwPass[32];
   /*APPVARS_DEFINITION*/
   int32_t u32magic;
 } stc_appconfig_t;
@@ -115,6 +121,10 @@ char* AppConfig_GetStaSsid(void);
 char* AppConfig_GetStaPassword(void);
 void AppConfig_SetStaSsid(char* ssid);
 void AppConfig_SetStaPassword(char* pass);
+char* AppConfig_GetWwwUser(void);
+void AppConfig_SetWwwUser(char* WwwUser);
+char* AppConfig_GetWwwPass(void);
+void AppConfig_SetWwwPass(char* WwwPass);
 /*APPFUNC_PROTOTYPES*/
 
 //@} // AppConfigGroup

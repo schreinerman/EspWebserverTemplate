@@ -73,6 +73,8 @@
 stc_appconfig_t stcAppConfig = {
   INITIAL_SSID_STATION_MODE,
   INITIAL_PASSORD_STATION_MODE,
+  INITIAL_WWW_NAME,
+  INITIAL_WWW_PASS,
   /*APPVARS_INIT*/
   0xCFDFAABB
 };
@@ -80,6 +82,8 @@ stc_appconfig_t stcAppConfig = {
 stc_webconfig_description_t astcAppConfigDescription[] = {
     {enWebConfigTypeStringLen32,"ssid","Wifi-SSID"},
     {enWebConfigTypeStringLen32,"password","Wifi-PSK"},
+    {enWebConfigTypeStringLen32,"wwwuser","WWW-User"},
+    {enWebConfigTypeStringLen32,"wwwpass","WWW-Pass"},
     /*APPVARS_WEB_DEFINITION*/
 };
 
@@ -198,6 +202,8 @@ void AppConfig_Init(WebServer* pWebServerHandle)
       stcAppConfig.u32magic = 0xCFDFAABB;
       AppConfig_SetStaSsid(INITIAL_SSID_STATION_MODE);
       AppConfig_SetStaPassword(INITIAL_PASSORD_STATION_MODE);
+      AppConfig_SetWwwUser(INITIAL_WWW_NAME);
+      AppConfig_SetWwwPass(INITIAL_WWW_PASS);
       /*APPVARS_INIT_SETUP*/
       bLockWrite = false;
       AppConfig_Write();
@@ -291,6 +297,70 @@ void AppConfig_SetStaPassword(char* pass)
     AppConfig_Init(NULL);
   }
   strncpy(stcAppConfig.passwordStation,pass,32);
+  AppConfig_Write();
+}
+
+
+/**********************************************
+ * Get WwwUser - WWW-User
+ * 
+ * \return WwwUser
+ **********************************************
+ */
+char* AppConfig_GetWwwUser(void)
+{
+  if (bInitDone == false)
+  {
+    AppConfig_Init(NULL);
+  }
+  return stcAppConfig.wwwUser;
+}
+
+/*********************************************
+ * Set WwwUser - WWW-User
+ * 
+ * \param WwwUser WWW-User
+ * 
+ ********************************************* 
+ */
+void AppConfig_SetWwwUser(char* WwwUser)
+{
+  if (bInitDone == false)
+  {
+    AppConfig_Init(NULL);
+  }
+  strncpy(stcAppConfig.wwwUser,WwwUser,32);
+  AppConfig_Write();
+}
+/**********************************************
+ * Get WwwPass - WWW-Pass
+ * 
+ * \return WwwPass
+ **********************************************
+ */
+char* AppConfig_GetWwwPass(void)
+{
+  if (bInitDone == false)
+  {
+    AppConfig_Init(NULL);
+  }
+  return stcAppConfig.wwwPass;
+}
+
+/*********************************************
+ * Set WwwPass - WWW-Pass
+ * 
+ * \param WwwPass WWW-Pass
+ * 
+ ********************************************* 
+ */
+void AppConfig_SetWwwPass(char* WwwPass)
+{
+  if (bInitDone == false)
+  {
+    AppConfig_Init(NULL);
+  }
+  strncpy(stcAppConfig.wwwPass,WwwPass,32);
   AppConfig_Write();
 }
 
