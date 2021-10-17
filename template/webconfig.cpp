@@ -276,6 +276,9 @@ static void handleConfig() {
   "</div>"
   "</body>"
   "</html>";
+  if (!_pServer->authenticate(AppConfig_GetWwwUser(), AppConfig_GetWwwPass())) {
+      return _pServer->requestAuthentication();
+    }
   _pServer->send(200,"text/html",postForms);
 }
 
@@ -286,6 +289,9 @@ static void handleConfig() {
  */
 void handleForm() {
   int i;
+  if (!_pServer->authenticate(AppConfig_GetWwwUser(), AppConfig_GetWwwPass())) {
+      return _pServer->requestAuthentication();
+    }
   if (_pServer->method() != HTTP_POST) {
     _pServer->send(405, "text/plain", "Method Not Allowed");
   } else {
