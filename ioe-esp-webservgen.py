@@ -192,6 +192,7 @@ with open(fname_appconfig_h, 'r') as file :
   fdata_appconfig_h = file.read()
 
 # Replace the target string
+fdata_appconfig_h = fdata_appconfig_h.replace('MYAPP', args.name)
 fdata_appconfig_h = fdata_appconfig_h.replace('/*APPFUNC_PROTOTYPES*/', dataFuncProto)
 fdata_appconfig_h = fdata_appconfig_h.replace('/*APPVARS_DEFINITION*/', dataVarDef)
 fdata_appconfig_cpp = fdata_appconfig_cpp.replace('/*APPFUNC_IMPLEMENT*/', dataFuncImpl)
