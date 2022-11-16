@@ -76,6 +76,8 @@
  */
 
 #define APP_VERSION "V1.0.0"
+#define APP_NAME "MYAPP"
+
 #define INITIAL_SSID_STATION_MODE "MyWifi"
 #define INITIAL_PASSORD_STATION_MODE "MyPassword"
 
