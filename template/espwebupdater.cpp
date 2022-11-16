@@ -37,6 +37,7 @@
  */
 
 #include <Arduino.h>
+#include "appconfig.h"
 #include <stdint.h>
 #include "espwebupdater.h"
 #include "StreamString.h"
@@ -140,6 +141,9 @@ static const ICACHE_FLASH_ATTR char successResponse[] = "<META http-equiv=\"refr
     pWebServer->send(200, "text/html", serverIndex);
   });
   pWebServer->on("/update", HTTP_POST, []() {
+    if (!pWebServer->authenticate(AppConfig_GetWwwUser(), AppConfig_GetWwwPass())) {
+      return pWebServer->requestAuthentication();
+    }
     pWebServer->sendHeader("Connection", "close");
     if (Update.hasError()) {
       StreamString str;
@@ -153,6 +157,9 @@ static const ICACHE_FLASH_ATTR char successResponse[] = "<META http-equiv=\"refr
       ESP.restart();
     }
   }, []() {
+    if (!pWebServer->authenticate(AppConfig_GetWwwUser(), AppConfig_GetWwwPass())) {
+      return pWebServer->requestAuthentication();
+    }
     HTTPUpload &upload = pWebServer->upload();
     if (upload.status == UPLOAD_FILE_START) {
       Serial.setDebugOutput(true);
