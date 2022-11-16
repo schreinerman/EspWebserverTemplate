@@ -334,6 +334,16 @@ void WebConfig_Init(WebServer* pWebServerHandle, stc_webconfig_handle_t* pstcHan
   _pServer->on("/config/",handleConfig);
   _pServer->on("/config",handleConfig);
   _pServer->on("/postform/", handleForm);
+  #if defined(APP_VERSION)
+  _pServer->on("/appversion", []() {
+      _pServer->send(200, "text/plain", APP_VERSION);
+  });
+  #endif
+  #if defined(APP_NAME)
+  _pServer->on("/appname", []() {
+      _pServer->send(200, "text/plain", APP_NAME);
+  });
+  #endif
 }
 
 /**
