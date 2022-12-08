@@ -58,8 +58,8 @@
 #define uS_TO_S_FACTOR 1000000ULL  /* Conversion factor for micro seconds to seconds */
 #define TIME_TO_SLEEP  10          /* Time ESP32 will go to sleep (in seconds)       */
 #define TIME_TO_WAKE   15          /* Time between sleep waiting for connection      */
-#define TIMEOUT_SLEEP  60          /* Seconds after last keepout before sleep        */
-#define STATION_MODE_REBOOT (24 * 60)
+#define TIMEOUT_SLEEP  60          /* Seconds after last keepout before sleep, set to 0 to disable */
+#define STATION_MODE_REBOOT (5 * 60) /* reboot after 5 minutes in station mode, to keep station mode, set to 0 */
 
 /**
  *******************************************************************************
@@ -277,23 +277,37 @@ void Esp32Wifi_Connect(void)
     
 }
 
+
+
+
 /*
  * Update in loop, so ESP32 can be put to sleep mode in station mode
  */
 void Esp32Wifi_Update(void)
 {
-    if (millis() != millisOld)
+    uint32_t u32Diff = millis();
+    if (u32Diff < millisOld)
     {
-        u32Counter++;
-        u32StationReboot++;
+       u32Diff = 0xFFFFFFFFul - millisOld + u32Diff;
+    } else
+    {
+       u32Diff = u32Diff - millisOld;
+    }
+  
+    if (u32Diff > 0)
+    {
+        u32Counter += u32Diff;
+        u32StationReboot += u32Diff;
         millisOld = millis();
     }
+  
     #if STATION_MODE_REBOOT > 0
-    if ((_mode == enESP32WifiModeSoftAP) && (u32StationReboot > (STATION_MODE_REBOOT*1000)))
+    if ((_mode == enESP32WifiModeSoftAP) && (u32StationReboot > (STATION_MODE_REBOOT*1000)) && (WiFi.softAPgetStationNum() == 0))
     {
        ESP.restart();
     }
     #endif
+    #if TIMEOUT_SLEEP > 0
     if (u32Counter > (TIMEOUT_SLEEP*1000))
     {
         //Serial.println("sleep");
@@ -313,6 +327,7 @@ void Esp32Wifi_Update(void)
         Esp32Wifi_Connect();
         u32Counter = ((TIMEOUT_SLEEP-TIME_TO_WAKE)*1000);
     }
+    #endif
 }
 
 void Esp32Wifi_SetSleepTime(uint32_t u32SleepTime)
@@ -320,7 +335,7 @@ void Esp32Wifi_SetSleepTime(uint32_t u32SleepTime)
   if (u32TimeToSleepSeconds != u32SleepTime)
   {
     u32TimeToSleepSeconds = u32SleepTime;
-    #if !defined(ARDUINO_ARCH_ESP8266) //only available with ESP32
+    #if (!defined(ARDUINO_ARCH_ESP8266) && (TIMEOUT_SLEEP > 0)) //only available with ESP32
         esp_sleep_enable_timer_wakeup(u32TimeToSleepSeconds * uS_TO_S_FACTOR); // ESP32 wakes up every 5 seconds
     #endif
   }
