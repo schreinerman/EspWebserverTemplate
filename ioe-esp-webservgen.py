@@ -159,7 +159,6 @@ from_dir = "template"
 to_dir = args.name
 distutils.dir_util.copy_tree(from_dir, to_dir)
 os.rename(os.path.join(args.name,"template.ino"),os.path.join(args.name,args.name + ".ino"))
-os.rename(os.path.join(args.name,"template.yaml"),os.path.join(args.name,args.name + ".yaml"))
 
 # Opening JSON file
 f = open(args.conf,)
