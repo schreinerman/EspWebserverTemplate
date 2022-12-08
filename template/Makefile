@@ -10,10 +10,12 @@ urls_esp32:=https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/p
 cat := $(if $(filter $(OS),Windows_NT),type,cat)
 version_info := $(shell $(cat) VERSION)
 
-all: esp8266 esp32
+all: clean webupdate esp8266 esp32
 
-esp8266 esp32:
+webupdate:
 	python3 create_web_store.py
+	
+esp8266 esp32:
 	arduino-cli core install $@:$@
 	arduino-cli compile --build-path "$(build_path)" --profile $@
 
