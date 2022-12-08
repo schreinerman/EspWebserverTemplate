@@ -1,0 +1,9 @@
+{
+    "build_path":"build/",
+    "board_esp8266": "esp8266:esp8266:generic",
+    "board_options_esp8266": "eesz=1M64,ip=lm2f,lvl=None____, baud=115200",
+    "urls_esp8266":"http://arduino.esp8266.com/stable/package_esp8266com_index.json",
+    "board_esp32": "esp32:esp32:esp32",
+    "board_options_esp32": "PartitionScheme=min_spiffs,UploadSpeed=115200",
+    "urls_esp32":"https://dl.espressif.com/dl/package_esp32_index.json",
+}
