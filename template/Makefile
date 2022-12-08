@@ -29,4 +29,4 @@ esp8266 esp32:
 	mv "./$(build_path)/"*.ino.bin "./$(release_path)/v$(version_info)_$@_$(NAME).bin"
 clean:
 	mkdir -p build
-	rm -R build/*
+	$(RM) -fR build/*
