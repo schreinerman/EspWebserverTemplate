@@ -8,7 +8,7 @@ In the file named `example_app.json` is containing already some hints, how to sp
 
 To create a new Arduino project `myfirstwebserver` following steps are required:
 ```
-python install -r requirements
+python -m pip install -r requirements.txt
 python ioe-esp-webservgen.py --name "myfirstwebserver" --conf "example_app.json"
 ```
 
