@@ -44,7 +44,6 @@
 #include <WiFiClient.h>
 #if defined(ARDUINO_ARCH_ESP8266)
   #include <ESP8266WebServer.h>
-  #include <uri/UriBraces.h>
 #elif defined(ARDUINO_ARCH_ESP32)
   #include <WebServer.h>
 #endif
