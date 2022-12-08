@@ -13,7 +13,7 @@ version_info := $(shell $(cat) VERSION)
 all: clean webupdate esp8266 esp32
 
 webupdate:
-	python3 create_web_store.py
+	python create_web_store.py
 	
 esp8266 esp32:
 	arduino-cli core install $@:$@
