@@ -1,0 +1,37 @@
+image: debian:latest
+
+stages:
+  - build
+  - test
+
+variables:
+  DOCKER_HOST: tcp://docker:2375/
+  DOCKER_DRIVER: overlay2
+  DOCKER_TLS_CERTDIR: ""
+
+before_script:
+  - apt-get update && apt-get install -y curl wget bzip2 tar ca-certificates make python3 python3-pip
+  - curl -fsSL https://raw.githubusercontent.com/arduino/arduino-cli/master/install.sh | BINDIR=/usr/bin sh
+  - touch /root/.arduino15/package_esp8266com_index.json
+  - arduino-cli config init
+  - arduino-cli config add board_manager.additional_urls "http://arduino.esp8266.com/stable/package_esp8266com_index.json"
+  - arduino-cli update
+  - chmod +x ./build.sh
+
+build_service:
+  stage: build
+  script:
+    - sh ./build.sh build
+  artifacts:
+    paths:
+      - release
+    expire_in: 1 week
+  only:
+    - main
+
+test_service:
+  stage: test
+  script:
+    - sh ./build.sh test
+  only:
+    - main
