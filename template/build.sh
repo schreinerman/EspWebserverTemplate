@@ -2,7 +2,7 @@
 case $1 in
 
     "build")
-        make esp8266
+        make all
         ;;
 
     "test")
