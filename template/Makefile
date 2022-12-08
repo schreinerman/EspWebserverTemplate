@@ -13,16 +13,17 @@ version_info := $(shell $(cat) VERSION)
 all: esp8266 esp32
 
 esp8266 esp32:
+	python3 create_web_store.py
 	arduino-cli core install $@:$@
 	arduino-cli compile --build-path "$(build_path)" --profile $@
-	
+
 #	arduino-cli compile -b "$(board_$@)" --board-options "$(board_options_$@)" --additional-urls "$(urls_$@)" --build-path "$(build_path)" 
 #	--build-property "build.extra_flags=-DAPP_VERSION=\"V$(version_info)\""
 
 	mkdir -p "$(release_path)"
-        $(eval BINFILE := $(wildcard ${build_path}/*.ino.bin))
-        $(eval NAME := $(notdir $(basename $(basename ${BINFILE}))))
+	$(eval BINFILE := $(wildcard ${build_path}/*.ino.bin))
+	$(eval NAME := $(notdir $(basename $(basename ${BINFILE}))))
 
-        mv "./$(build_path)/"*.ino.bin "./$(release_path)/v$(version_info)_$@_$(NAME).bin"
+	mv "./$(build_path)/"*.ino.bin "./$(release_path)/v$(version_info)_$@_$(NAME).bin"
 clean:
 	rm -R build/*
