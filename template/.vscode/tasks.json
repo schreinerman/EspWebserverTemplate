@@ -1,0 +1,28 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "build: esp8266",
+            "type": "shell",
+            "command": "arduino-cli compile -b ${config:board_esp8266} --board-options \"${config:board_options_esp8266}\" --additional-urls \"${config:urls_esp8266}\" --build-path \"${config:build_path}\""
+        },
+        {
+            "label": "print: esp8266 options",
+            "type": "shell",
+            "command": "arduino-cli board details -b ${config:board_esp8266}"
+        },
+        {
+            "label": "build: esp32",
+            "type": "shell",
+            "command": "arduino-cli compile -b ${config:board_esp32} --board-options \"${config:board_options_esp32}\" --additional-urls \"${config:urls_esp32}\" --build-path \"${config:build_path}\""
+        },
+        {
+            "label": "print: esp32 options",
+            "type": "shell",
+            "command": "arduino-cli board details -b ${config:board_esp32}"
+        }
+
+    ]
+}
