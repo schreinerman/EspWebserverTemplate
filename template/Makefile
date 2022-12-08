@@ -10,9 +10,6 @@ urls_esp32:=https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/p
 cat := $(if $(filter $(OS),Windows_NT),type,cat)
 version_info := $(shell $(cat) VERSION)
 
-RM ?= rm
-MD ?= mkdir
-
 all: clean webupdate esp8266 esp32
 
 webupdate:
@@ -25,11 +22,11 @@ esp8266 esp32:
 #	arduino-cli compile -b "$(board_$@)" --board-options "$(board_options_$@)" --additional-urls "$(urls_$@)" --build-path "$(build_path)" 
 #	--build-property "build.extra_flags=-DAPP_VERSION=\"V$(version_info)\""
 
-	$(MD) -p "$(release_path)"
+	mkdir -p "$(release_path)"
 	$(eval BINFILE := $(wildcard ${build_path}/*.ino.bin))
 	$(eval NAME := $(notdir $(basename $(basename ${BINFILE}))))
 
 	mv "./$(build_path)/"*.ino.bin "./$(release_path)/v$(version_info)_$@_$(NAME).bin"
 clean:
-	$(MD) -p build
-	$(RM) -fR build/*
+	mkdir -p build
+	rm -fR build/*
