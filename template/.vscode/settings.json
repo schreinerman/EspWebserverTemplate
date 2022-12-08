@@ -5,5 +5,5 @@
     "urls_esp8266":"http://arduino.esp8266.com/stable/package_esp8266com_index.json",
     "board_esp32": "esp32:esp32:esp32",
     "board_options_esp32": "PartitionScheme=min_spiffs,UploadSpeed=115200",
-    "urls_esp32":"https://dl.espressif.com/dl/package_esp32_index.json",
+    "urls_esp32":"https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_index.json",
 }
