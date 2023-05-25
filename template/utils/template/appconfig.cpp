@@ -39,7 +39,7 @@
 #include <Arduino.h>
 #include "stdint.h"
 #include "appconfig.h"
-#include "webconfig.h"
+#include "./wifimcu/webconfig.h"
 
 #if defined(ARDUINO_ARCH_ESP8266)
 #include <EEPROM.h>
@@ -72,10 +72,10 @@
 
 
 stc_appconfig_t stcAppConfig = {
-  INITIAL_SSID_STATION_MODE,
-  INITIAL_PASSWORD_STATION_MODE,
-  INITIAL_WWW_NAME,
-  INITIAL_WWW_PASS,
+  {INITIAL_SSID_STATION_MODE},
+  {INITIAL_PASSWORD_STATION_MODE},
+  {INITIAL_WWW_NAME},
+  {INITIAL_WWW_PASS},
   /*APPVARS_INIT*/
   0xCFDFAABBUL
 };
@@ -242,7 +242,7 @@ void AppConfig_Write(void)
  * \return SSID as string
  ********************************************* 
  */
-char* AppConfig_GetStaSsid(void)
+const char* AppConfig_GetStaSsid(void)
 {
   if (bInitDone == false)
   {
@@ -259,7 +259,7 @@ char* AppConfig_GetStaSsid(void)
  * 
  ********************************************* 
  */
-void AppConfig_SetStaSsid(char* ssid)
+void AppConfig_SetStaSsid(const char* ssid)
 {
   if (bInitDone == false)
   {
@@ -275,7 +275,7 @@ void AppConfig_SetStaSsid(char* ssid)
  * \return password as string
  ********************************************* 
  */
-char* AppConfig_GetStaPassword(void)
+const char* AppConfig_GetStaPassword(void)
 {
   if (bInitDone == false)
   {
@@ -291,7 +291,7 @@ char* AppConfig_GetStaPassword(void)
  * 
  ********************************************* 
  */
-void AppConfig_SetStaPassword(char* pass)
+void AppConfig_SetStaPassword(const char* pass)
 {
   if (bInitDone == false)
   {
@@ -308,7 +308,7 @@ void AppConfig_SetStaPassword(char* pass)
  * \return WwwUser
  **********************************************
  */
-char* AppConfig_GetWwwUser(void)
+const char* AppConfig_GetWwwUser(void)
 {
   if (bInitDone == false)
   {
@@ -324,7 +324,7 @@ char* AppConfig_GetWwwUser(void)
  * 
  ********************************************* 
  */
-void AppConfig_SetWwwUser(char* WwwUser)
+void AppConfig_SetWwwUser(const char* WwwUser)
 {
   if (bInitDone == false)
   {
@@ -339,7 +339,7 @@ void AppConfig_SetWwwUser(char* WwwUser)
  * \return WwwPass
  **********************************************
  */
-char* AppConfig_GetWwwPass(void)
+const char* AppConfig_GetWwwPass(void)
 {
   if (bInitDone == false)
   {
@@ -355,7 +355,7 @@ char* AppConfig_GetWwwPass(void)
  * 
  ********************************************* 
  */
-void AppConfig_SetWwwPass(char* WwwPass)
+void AppConfig_SetWwwPass(const char* WwwPass)
 {
   if (bInitDone == false)
   {

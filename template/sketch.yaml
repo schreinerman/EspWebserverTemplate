@@ -3,14 +3,10 @@ profiles:
     notes: Default profile for Arduino-CI
     fqbn: esp8266:esp8266:generic:eesz=1M64,ip=lm2f,lvl=None____,baud=115200
     platforms:
-      - platform: esp8266:esp8266 (3.0.2)
+      - platform: esp8266:esp8266 (3.1.2)
         platform_index_url: http://arduino.esp8266.com/stable/package_esp8266com_index.json
     libraries:
-      - ESP8266WiFi (1.0)
-      - ESP8266WebServer (1.0)
-      - ESP8266mDNS (1.2)
-      - EEPROM (1.0)
-      - DNSServer (1.1.1)
+      - ArduinoJson (6.21.1)
   esp32:
     notes: Default profile for Arduino-CI
     fqbn: esp32:esp32:esp32:PartitionScheme=min_spiffs,UploadSpeed=115200
@@ -18,13 +14,7 @@ profiles:
       - platform: esp32:esp32 (1.0.6)
         platform_index_url: https://dl.espressif.com/dl/package_esp32_index.json
     libraries:
-      - WiFi (1.0)
-      - WebServer (1.0)
-      - ESPmDNS (1.0)
-      - FS (1.0)
-      - SPIFFS (1.0)
-      - DNSServer (1.1.0)
-      - Update (1.0)
+      - ArduinoJson (6.21.1)
   rp2040:
     notes: Default profile for Arduino-CI
     fqbn: rp2040:rp2040:rpipicow:usbstack=tinyusb,flash=2097152_65536,freq=240,wificountry=germany

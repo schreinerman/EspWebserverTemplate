@@ -43,7 +43,7 @@
   #include <WiFi.h>
 #endif
 #include <WiFiClient.h>
-#include "appconfig.h"
+#include "../appconfig.h"
 #include "appwebserver.h"
 #include "htmlfs.h"
 #include "wifimcuctrl.h"

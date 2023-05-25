@@ -67,7 +67,7 @@
  */
 
 #include "stdint.h"
-#include "webconfig.h"
+#include "./wifimcu/webconfig.h"
 
 /**
  *******************************************************************************
@@ -119,14 +119,14 @@ void AppConfig_Init(ESP8266WebServer* pWebServerHandle);
 void AppConfig_Init(WebServer* pWebServerHandle);
 #endif
 void AppConfig_Write(void);
-char* AppConfig_GetStaSsid(void);
-char* AppConfig_GetStaPassword(void);
-void AppConfig_SetStaSsid(char* ssid);
-void AppConfig_SetStaPassword(char* pass);
-char* AppConfig_GetWwwUser(void);
-void AppConfig_SetWwwUser(char* WwwUser);
-char* AppConfig_GetWwwPass(void);
-void AppConfig_SetWwwPass(char* WwwPass);
+const char* AppConfig_GetStaSsid(void);
+const char* AppConfig_GetStaPassword(void);
+void AppConfig_SetStaSsid(const char* ssid);
+void AppConfig_SetStaPassword(const char* pass);
+const char* AppConfig_GetWwwUser(void);
+void AppConfig_SetWwwUser(const char* WwwUser);
+const char* AppConfig_GetWwwPass(void);
+void AppConfig_SetWwwPass(const char* WwwPass);
 /*APPFUNC_PROTOTYPES*/
 
 //@} // AppConfigGroup

@@ -38,7 +38,7 @@
  */
 
 #include <Arduino.h>
-#include "appconfig.h"
+#include "../appconfig.h"
 #include <stdint.h>
 #include "wifimcuwebupdater.h"
 #include "StreamString.h"

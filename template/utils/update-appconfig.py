@@ -67,7 +67,7 @@ dictWebVarType = {
 def getDataInit(varName,varType,varInit):
     varCType = dictCVarType.get(varType)
     if varCType == "char*":
-        return "\"" + varInit + "\""
+        return "{\"" + varInit + "\"}"
     return varInit
 
 def genDataInit(varName,varType,varInit):
@@ -119,7 +119,10 @@ def genFuncImplementation(varName,varType,varDescription):
     funcImplementation += "}\r\n"
     funcImplementation = funcImplementation.replace("%VAR_COPY%",varCopy)
     funcImplementation = funcImplementation.replace("%VAR_NAME%",varName)
-    funcImplementation = funcImplementation.replace("%VAR_TYPE%",varCType)
+    if "String" in varType:
+        funcImplementation = funcImplementation.replace("%VAR_TYPE%","const " + varCType)
+    else:
+        funcImplementation = funcImplementation.replace("%VAR_TYPE%",varCType)
     funcImplementation = funcImplementation.replace("%VAR_DESCRIPTION%",varDescription)
     return funcImplementation
 
@@ -129,7 +132,10 @@ def genFuncPrototype(varName,varType,varDescription):
     funcPrototype += "%VAR_TYPE% AppConfig_Get%VAR_NAME%(void);\r\n"
     funcPrototype += "void AppConfig_Set%VAR_NAME%(%VAR_TYPE% %VAR_NAME%);\r\n"
     funcPrototype = funcPrototype.replace("%VAR_NAME%",varName)
-    funcPrototype = funcPrototype.replace("%VAR_TYPE%",varCType)
+    if "String" in varType:
+        funcPrototype = funcPrototype.replace("%VAR_TYPE%","const " + varCType)
+    else:
+        funcPrototype = funcPrototype.replace("%VAR_TYPE%",varCType)
     funcPrototype = funcPrototype.replace("%VAR_DESCRIPTION%",varDescription)
     return funcPrototype
 
@@ -157,10 +163,10 @@ def main():
         projectPath = os.path.join(projectPath,os.pardir)
 
     appConfigFile = os.path.join(projectPath,"appconfig.json")
-    fname_appconfig_cpp = os.path.join(projectPath,"src","wifimcu","appconfig.cpp")
-    fname_appconfig_h = os.path.join(projectPath,"src","wifimcu","appconfig.h")
+    fname_appconfig_cpp = os.path.join(projectPath,"src","appconfig.cpp")
+    fname_appconfig_h = os.path.join(projectPath,"src","appconfig.h")
 
-    distutils.dir_util.copy_tree(templatesPath, os.path.join(projectPath,"src","wifimcu"))
+    distutils.dir_util.copy_tree(templatesPath, os.path.join(projectPath,"src"))
 
     # Opening JSON file
     f = open(appConfigFile,)
