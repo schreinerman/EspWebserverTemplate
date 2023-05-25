@@ -25,6 +25,7 @@
  **
  ** History:
  ** - 2021-1-2  1.00  Manuel Schreiner
+ ** - 2023-05-24 1.10 Manuel Schreiner - Adding RP2040 / Raspberry Pi Pico W Support
  *******************************************************************************
  */
 

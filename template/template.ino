@@ -43,19 +43,16 @@
 
 #if defined(ARDUINO_ARCH_ESP8266)
   #include <ESP8266WiFi.h>
-#elif defined(ARDUINO_ARCH_ESP32)
-  #include <WiFi.h>
-#else
-#error Not supported architecture
-#endif
-#include <WiFiClient.h>
-
-#if defined(ARDUINO_ARCH_ESP8266)
   #include <ESP8266WebServer.h>
   #include <ESP8266mDNS.h>
 #elif defined(ARDUINO_ARCH_ESP32)
+  #include <WiFi.h>
   #include <WebServer.h>
   #include <ESPmDNS.h>
+#elif defined(ARDUINO_ARCH_RP2040)
+  #include <WiFi.h>
+  #include <WebServer.h>
+  #include <LEAmDNS.h>
 #else
 #error Not supported architecture
 #endif
@@ -94,9 +91,9 @@
  *******************************************************************************
  */
     
-const char *ssidAp = "MyEspConfigAP";
-const char *passwordAp = "MyEspConfigAP";
-const char *hostName = "my-esp";
+const char *ssidAp = "MyWifiMcuConfigAP";
+const char *passwordAp = "MyWifiMcuConfigAP";
+const char *hostName = "my-wifimcu";
 
 static int minsLast = 0;
 static int hoursLast = 0;
@@ -106,6 +103,8 @@ static uint32_t u32LastMillis = 0;
 #if defined(ARDUINO_ARCH_ESP8266)
 static ESP8266WebServer webServer(80);
 #elif defined(ARDUINO_ARCH_ESP32)
+static WebServer webServer(80);
+#elif defined(ARDUINO_ARCH_RP2040)
 static WebServer webServer(80);
 #endif
 
@@ -138,6 +137,8 @@ void setup() {
   #if defined(ARDUINO_ARCH_ESP8266)
      WiFi.hostname(hostName);
   #elif defined(ARDUINO_ARCH_ESP32)
+     WiFi.setHostname(hostName);
+  #elif defined(ARDUINO_ARCH_RP2040)
      WiFi.setHostname(hostName);
   #endif
   
@@ -174,7 +175,7 @@ void setup() {
   #endif
   
   MDNS.addService("http", "tcp", 80);
-  MDNS.addService("my-esp","tcp",80);
+  MDNS.addService("my-wifimcu","tcp",80);
 
   //add your initial stuff here
 }

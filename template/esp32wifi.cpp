@@ -25,6 +25,7 @@
  **
  ** History:
  ** - 2021-1-2  1.00  Manuel Schreiner
+ ** - 2023-05-24 1.10 Manuel Schreiner - Adding RP2040 / Raspberry Pi Pico W Support
  *******************************************************************************
  */
 
@@ -42,6 +43,8 @@
 #if defined(ARDUINO_ARCH_ESP8266)
   #include <ESP8266WiFi.h>
 #elif defined(ARDUINO_ARCH_ESP32)
+  #include <WiFi.h>
+#elif defined(ARDUINO_ARCH_RP2040)
   #include <WiFi.h>
 #endif
 #include <WiFiClient.h>
@@ -79,7 +82,7 @@
  *******************************************************************************
  */
 
-const byte DNS_PORT = 53;
+const uint8_t DNS_PORT = 53;
 DNSServer dnsServer;
 static uint32_t millisOld = 0;
 static volatile uint32_t u32Counter = 1;
@@ -99,7 +102,8 @@ static en_esp32_wifi_mode_t _mode = enESP32WifiModeSoftAP;
  *******************************************************************************
  */
 
-
+static bool GetConnected(void);
+static void WiFiConnect(void);
 static void ConnectStation(void);
 static void ConnectSoftAP(void);
 
@@ -108,6 +112,46 @@ static void ConnectSoftAP(void);
  ** Function implementation - global ('extern') and local ('static') 
  *******************************************************************************
  */
+
+static bool GetConnected(void)
+{
+    #if defined(ARDUINO_ARCH_ESP8266) || defined(ARDUINO_ARCH_ESP32)
+       if (WiFi.status() == WL_CONNECTED)
+       {
+          return true;
+       }
+    #else
+      if (WiFi.connected())
+       {
+          return true;
+       }
+    #endif
+    return false;
+}
+
+static void WiFiConnect(void)
+{
+    volatile int i = 0;
+    #if defined(ARDUINO_ARCH_RP2040)
+      WiFi.begin(_ssidStationMode, _passwordStationMode, NULL);
+      while (!GetConnected() && (i < 100)) 
+      {
+        delay(5);
+        i++;
+      }
+    #else
+      WiFi.disconnect();
+      WiFi.persistent( false );
+
+      WiFi.mode(WIFI_STA);
+      WiFi.begin(_ssidStationMode, _passwordStationMode);
+      while (!GetConnected() && (i < 100)) 
+      {
+        delay(5);
+        i++;
+      }
+    #endif
+}
 
 /**
  * Init WiFi
@@ -126,7 +170,7 @@ void Esp32Wifi_Init(en_esp32_wifi_mode_t mode, const char* ssid, const char* pas
     _passwordStationMode = (char*)password;
     _ssidApMode = (char*)ssid;
     _passwordApMode = (char*)password;
-    #if !defined(ARDUINO_ARCH_ESP8266) //only available with ESP32
+    #if defined(ARDUINO_ARCH_ESP32) //only available with ESP32
         esp_sleep_enable_timer_wakeup(u32TimeToSleepSeconds * uS_TO_S_FACTOR); // ESP32 wakes up every 5 seconds
     #endif
     Esp32Wifi_Connect();
@@ -150,42 +194,46 @@ void Esp32Wifi_DualModeInit(const char* ssidStation, const char* passwordStation
     _passwordStationMode = (char*)passwordStation;
     _ssidApMode = (char*)ssidAp;
     _passwordApMode = (char*)passwordAp;
-    #if !defined(ARDUINO_ARCH_ESP8266) //only available with ESP32
+    #if defined(ARDUINO_ARCH_ESP32) //only available with ESP32
        esp_sleep_enable_timer_wakeup(u32TimeToSleepSeconds * uS_TO_S_FACTOR); // ESP32 wakes up every 5 seconds
     #endif
-    WiFi.disconnect();
-    WiFi.persistent( false );
+    #if defined(ARDUINO_ARCH_ESP8266) || defined(ARDUINO_ARCH_ESP32)
+      WiFi.disconnect();
+      WiFi.persistent( false );
+    #endif
     #if defined(ARDUINO_ARCH_ESP8266)
         WiFi.setOutputPower(20.5); // this sets wifi to highest power
     #endif
-    WiFi.mode(WIFI_STA);
-    WiFi.begin(_ssidStationMode, _passwordStationMode);
-    delay(500);
+    
+    WiFiConnect();
+
+    #if defined(ARDUINO_ARCH_RP2040)
+    if (!GetConnected())
+    {
+        Serial.println("Initializing AP mode...");
+        _mode = enESP32WifiModeSoftAP;
+        WiFi.disconnect();
+        Esp32Wifi_Connect();
+        return;
+    }
+    #endif
+    
     // Wait for connection
     volatile uint32_t u32Tries = 0;
-    while (WiFi.status() != WL_CONNECTED) 
+    while (!GetConnected()) 
     {   
         u32Tries++;
-        if ((u32Tries == 10) || (u32Tries == 20))
+        if ((u32Tries == 5) || (u32Tries == 10))
         {
-           WiFi.disconnect();
-           WiFi.persistent( false );
-           WiFi.mode(WIFI_STA);
-           WiFi.begin(_ssidStationMode, _passwordStationMode);
+           WiFiConnect();
         }
-        if (u32Tries > 30)
+        if (u32Tries > 15)
         {
            Serial.println("Initializing AP mode...");
            _mode = enESP32WifiModeSoftAP;
            WiFi.disconnect();
            Esp32Wifi_Connect();
            return;
-        }
-        volatile int i = 0;
-        while ((WiFi.status() != WL_CONNECTED) && (i < 500))
-        {
-            delay(1);
-            i++;
         }
     }
     Serial.println("STA Connected...");
@@ -198,13 +246,9 @@ void Esp32Wifi_DualModeInit(const char* ssidStation, const char* passwordStation
  */
 static void ConnectStation(void)
 {
-  if (WiFi.status() != WL_CONNECTED)
+  if (!GetConnected())
   {
-      WiFi.disconnect();
-      WiFi.persistent( false );
-      WiFi.mode(WIFI_STA);
-      WiFi.begin(_ssidStationMode, _passwordStationMode);
-      delay(500);
+      WiFiConnect();
       //Serial.println("WiFi initiated...");
     
       // Wait for connection
@@ -215,21 +259,17 @@ static void ConnectStation(void)
           u32Tries++;
           if ((u32Tries % 10) == 0)
           {
-            WiFi.disconnect();
-            WiFi.persistent( false );
-            WiFi.mode(WIFI_STA);
-            WiFi.begin(_ssidStationMode, _passwordStationMode);
+            WiFiConnect();
             //Serial.println("WiFi initiated...");
           }
           if (u32Tries > 60)
           {
+            #if defined(ARDUINO_ARCH_ESP32) || defined(ARDUINO_ARCH_ESP8266)
               ESP.restart();
-          }
-          volatile int i = 0;
-          while ((WiFi.status() != WL_CONNECTED) && (i < 500))
-          {
-              delay(1);
-              i++;
+            #endif
+            #if defined(ARDUINO_ARCH_RP2040)
+              rp2040.restart();
+            #endif
           }
       }
   }
@@ -304,7 +344,12 @@ void Esp32Wifi_Update(void)
     #if STATION_MODE_REBOOT > 0
     if ((_mode == enESP32WifiModeSoftAP) && (u32StationReboot > (STATION_MODE_REBOOT*1000)) && (WiFi.softAPgetStationNum() == 0))
     {
-       ESP.restart();
+        #if defined(ARDUINO_ARCH_ESP32) || defined(ARDUINO_ARCH_ESP8266)
+          ESP.restart();
+        #endif
+        #if defined(ARDUINO_ARCH_RP2040)
+          rp2040.restart();
+        #endif
     }
     #endif
     #if TIMEOUT_SLEEP > 0
@@ -318,7 +363,7 @@ void Esp32Wifi_Update(void)
               WiFi.forceSleepBegin();
               delay(u32TimeToSleepSeconds*1000);
               WiFi.forceSleepWake();
-          #elif !defined(ARDUINO_ARCH_ESP8266) //only available with ESP32
+          #elif defined(ARDUINO_ARCH_ESP32) //only available with ESP32
               esp_light_sleep_start();
           #endif
            
@@ -335,7 +380,7 @@ void Esp32Wifi_SetSleepTime(uint32_t u32SleepTime)
   if (u32TimeToSleepSeconds != u32SleepTime)
   {
     u32TimeToSleepSeconds = u32SleepTime;
-    #if (!defined(ARDUINO_ARCH_ESP8266) && (TIMEOUT_SLEEP > 0)) //only available with ESP32
+    #if (defined(ARDUINO_ARCH_ESP32) && (TIMEOUT_SLEEP > 0)) //only available with ESP32
         esp_sleep_enable_timer_wakeup(u32TimeToSleepSeconds * uS_TO_S_FACTOR); // ESP32 wakes up every 5 seconds
     #endif
   }

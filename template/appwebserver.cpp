@@ -25,6 +25,7 @@
  **
  ** History:
  ** - 2021-1-2  1.00  Manuel Schreiner
+ ** - 2023-05-24 1.10 Manuel Schreiner - Adding RP2040 / Raspberry Pi Pico W Support
  *******************************************************************************
  */
 
@@ -42,11 +43,6 @@
   #include <WiFi.h>
 #endif
 #include <WiFiClient.h>
-#if defined(ARDUINO_ARCH_ESP8266)
-  #include <ESP8266WebServer.h>
-#elif defined(ARDUINO_ARCH_ESP32)
-  #include <WebServer.h>
-#endif
 #include "appconfig.h"
 #include "appwebserver.h"
 #include "htmlfs.h"

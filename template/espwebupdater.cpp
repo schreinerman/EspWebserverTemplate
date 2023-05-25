@@ -25,6 +25,7 @@
  **
  ** History:
  ** - 2021-2-20  1.00  Manuel Schreiner
+ ** - 2023-05-24 1.10 Manuel Schreiner - Adding RP2040 / Raspberry Pi Pico W Support
  *******************************************************************************
  */
 
@@ -52,6 +53,10 @@
 #elif defined(ARDUINO_ARCH_ESP32)
 #include <Update.h>
 #include <WiFiUdp.h>
+#elif defined(ARDUINO_ARCH_RP2040)
+#include <WiFi.h>
+#include <WiFiClient.h>
+#include <LittleFS.h>
 #else 
 #error Unsupported platform, requires ESP32 or ESP8266 core
 #endif
@@ -86,13 +91,21 @@ static ESP8266WebServer* pWebServer;
 static WebServer* pWebServer;
 #endif
 
+#if defined(ARDUINO_ARCH_ESP8266) || defined(ARDUINO_ARCH_ESP32)
+#define PLACE_IROM ICACHE_FLASH_ATTR
+#endif
+
+#if defined(ARDUINO_ARCH_RP2040)
+  #define PLACE_IROM
+#endif
+
 /**
  *******************************************************************************
  ** Local function prototypes ('static') 
  *******************************************************************************
  */
 
-static const ICACHE_FLASH_ATTR char serverIndex[] = "<html>"
+static const PLACE_IROM char serverIndex[] = "<html>"
   "<head>"
   "<title>App Update</title>"
   "<meta name=\"viewport\" content=\"width=device-width,initial-scale=1.0\">"
@@ -114,7 +127,7 @@ static const ICACHE_FLASH_ATTR char serverIndex[] = "<html>"
   "</body"
   "</html>";
 
-static const ICACHE_FLASH_ATTR char successResponse[] = "<META http-equiv=\"refresh\" content=\"15;URL=/\">Update Success! Rebooting...";
+static const PLACE_IROM char successResponse[] = "<META http-equiv=\"refresh\" content=\"15;URL=/\">Update Success! Rebooting...";
 
 /**
  *******************************************************************************
@@ -154,7 +167,12 @@ static const ICACHE_FLASH_ATTR char successResponse[] = "<META http-equiv=\"refr
       pWebServer->send_P(200, PSTR("text/html"), successResponse);
       delay(100);
       pWebServer->client().stop();
-      ESP.restart();
+      #if defined(ARDUINO_ARCH_ESP32) || defined(ARDUINO_ARCH_ESP8266)
+        ESP.restart();
+      #endif
+      #if defined(ARDUINO_ARCH_RP2040)
+        rp2040.restart();
+      #endif
     }
   }, []() {
     if (!pWebServer->authenticate(AppConfig_GetWwwUser(), AppConfig_GetWwwPass())) {
@@ -162,16 +180,22 @@ static const ICACHE_FLASH_ATTR char successResponse[] = "<META http-equiv=\"refr
     }
     HTTPUpload &upload = pWebServer->upload();
     if (upload.status == UPLOAD_FILE_START) {
-      Serial.setDebugOutput(true);
-      Serial.printf("Update: %s\n", upload.filename.c_str());
+#if defined(ARDUINO_ARCH_RP2040)
+      FSInfo64 i;
+      LittleFS.begin();
+      LittleFS.info64(i);
+#endif
       
-#if defined(ARDUINO_ARCH_ESP8266)
+#if defined(ARDUINO_ARCH_ESP8266) || defined(ARDUINO_ARCH_RP2040)
       WiFiUDP::stopAll();
 #endif
       
  #if defined(ARDUINO_ARCH_ESP8266)
       uint32_t maxSketchSpace = (ESP.getFreeSketchSpace() - 0x1000) & 0xFFFFF000;
       if (!Update.begin(maxSketchSpace, U_FLASH)){//start with max available size
+ #elif defined(ARDUINO_ARCH_RP2040)
+      uint32_t maxSketchSpace = i.totalBytes - i.usedBytes;
+      if (!Update.begin(maxSketchSpace)) {  // start with max available size
  #else
       if (!Update.begin()) { //start with max available size
  #endif
@@ -187,7 +211,6 @@ static const ICACHE_FLASH_ATTR char successResponse[] = "<META http-equiv=\"refr
       } else {
         Update.printError(Serial);
       }
-      Serial.setDebugOutput(false);
     } else {
       Serial.printf("Update Failed Unexpectedly (likely broken connection): status=%d\n", upload.status);
     }

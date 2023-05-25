@@ -1,1 +1,4 @@
 htmlmin
+imageio
+Pillow
+pilkit

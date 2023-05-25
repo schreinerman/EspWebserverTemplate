@@ -25,3 +25,14 @@ profiles:
       - SPIFFS (1.0)
       - DNSServer (1.1.0)
       - Update (1.0)
+  rp2040:
+    notes: Default profile for Arduino-CI
+    fqbn: rp2040:rp2040:rpipicow:usbstack=tinyusb,flash=2097152_65536,freq=240,wificountry=germany
+    platforms:
+      - platform: rp2040:rp2040 (3.2.1)
+        platform_index_url: https://github.com/earlephilhower/arduino-pico/releases/download/global/package_rp2040_index.json
+    libraries:
+      - ArduinoJson (6.21.1)
+      - Pico PIO USB (0.5.2)
+      - Adafruit TinyUSB Library (2.2.0)
+

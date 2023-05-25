@@ -25,6 +25,7 @@
  **
  ** History:
  ** - 2021-2-3  1.00  Manuel Schreiner
+ ** - 2023-05-24 1.10 Manuel Schreiner - Adding RP2040 / Raspberry Pi Pico W Support
  *******************************************************************************
  */
 
@@ -74,7 +75,15 @@
  */
 
 
-static const ICACHE_FLASH_ATTR char successResponse[] = "<META http-equiv=\"refresh\" content=\"15;URL=/\">Update Success! Rebooting...";
+#if defined(ARDUINO_ARCH_ESP8266) || defined(ARDUINO_ARCH_ESP32)
+#define PLACE_IROM ICACHE_FLASH_ATTR
+#endif
+
+#if defined(ARDUINO_ARCH_RP2040)
+  #define PLACE_IROM
+#endif
+
+static const PLACE_IROM char successResponse[] = "<META http-equiv=\"refresh\" content=\"15;URL=/\">Update Success! Rebooting...";
 
 
 /**
@@ -269,7 +278,7 @@ static void handleConfig() {
     postForms += "name=\"" + String(pstcWebConfig->astcData[i].name) + "\"></td></tr>";
   }
   
-  postForms += "<tr><td>Version</td><td>"APP_VERSION"</td><tr>"
+  postForms += "<tr><td>Version</td><td>" APP_VERSION "</td><tr>"
   "<tr><td>&nbsp;</td><td align=right><a href=\"/firmware\" class=\"button\">FW Update</a>&nbsp;&nbsp;<input type=\"submit\" value=\"Save\"></td></tr>"
   "</table>"
   "</form>"
@@ -310,7 +319,12 @@ void handleForm() {
     _pServer->send_P(200, PSTR("text/html"), successResponse);
     delay(100);
     _pServer->client().stop();
-    ESP.restart();
+    #if defined(ARDUINO_ARCH_ESP32) || defined(ARDUINO_ARCH_ESP8266)
+      ESP.restart();
+    #endif
+    #if defined(ARDUINO_ARCH_RP2040)
+      rp2040.restart();
+    #endif
   }
 }
 

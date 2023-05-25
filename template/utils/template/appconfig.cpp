@@ -47,10 +47,11 @@
 #include "FS.h"
 #include "SPIFFS.h"
 #define USE_SPIFFS
+#elif defined(ARDUINO_ARCH_RP2040)
+  #include <EEPROM.h>
 #else
 #error Not supported architecture
 #endif
-
 
 /**
  *******************************************************************************
@@ -72,11 +73,11 @@
 
 stc_appconfig_t stcAppConfig = {
   INITIAL_SSID_STATION_MODE,
-  INITIAL_PASSORD_STATION_MODE,
+  INITIAL_PASSWORD_STATION_MODE,
   INITIAL_WWW_NAME,
   INITIAL_WWW_PASS,
   /*APPVARS_INIT*/
-  0xCFDFAABB
+  0xCFDFAABBUL
 };
 
 stc_webconfig_description_t astcAppConfigDescription[] = {
@@ -139,7 +140,7 @@ static bool InitData()
         }
       }
     #else
-      EEPROM.begin(512);
+      EEPROM.begin(1024);
       bInitalized = true;
     #endif
   }
@@ -195,13 +196,13 @@ void AppConfig_Init(WebServer* pWebServerHandle)
       return;
     }
     ReadData();
-    if (stcAppConfig.u32magic != 0xCFDFAABBUL)
+    if (stcAppConfig.u32magic != 0xCFDFAABB)
     {
       bLockWrite = true;
       memset(&stcAppConfig,0,sizeof(stcAppConfig));
       stcAppConfig.u32magic = 0xCFDFAABB;
       AppConfig_SetStaSsid(INITIAL_SSID_STATION_MODE);
-      AppConfig_SetStaPassword(INITIAL_PASSORD_STATION_MODE);
+      AppConfig_SetStaPassword(INITIAL_PASSWORD_STATION_MODE);
       AppConfig_SetWwwUser(INITIAL_WWW_NAME);
       AppConfig_SetWwwPass(INITIAL_WWW_PASS);
       /*APPVARS_INIT_SETUP*/
@@ -227,7 +228,7 @@ void AppConfig_Write(void)
   if (bLockWrite == false)
   {
     bLockWrite = true;
-    //Serial.println("Updating App Configuration...");
+    Serial.println("Updating App Configuration...");
 
     WriteData();
     

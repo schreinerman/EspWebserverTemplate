@@ -7,7 +7,14 @@
 #else
 #include <WebServer.h>
 #endif
+
+#if defined(ARDUINO_ARCH_ESP8266) || defined(ARDUINO_ARCH_ESP32)
 #define PLACE_IROM ICACHE_FLASH_ATTR
+#endif
+
+#if defined(ARDUINO_ARCH_RP2040)
+  #define PLACE_IROM
+#endif
 
 
 #if defined(ARDUINO_ARCH_ESP8266)

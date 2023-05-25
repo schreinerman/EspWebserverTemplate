@@ -17,20 +17,19 @@
 
 /**
  *******************************************************************************
- **\file webconfig.c
+ **\file appconfig.c
  **
- ** Web Configuration
+ ** App Configuration
  ** A detailed description is available at
- ** @link WebConfigGroup file description @endlink
+ ** @link AppConfigGroup file description @endlink
  **
  ** History:
  ** - 2021-2-3  1.00  Manuel Schreiner
- ** - 2023-05-24 1.10 Manuel Schreiner - Adding RP2040 / Raspberry Pi Pico W Support
  *******************************************************************************
  */
 
-#if !defined(__WEBCONFIG_H__)
-#define __WEBCONFIG_H__
+#if !defined(__APPCONFIG_H__)
+#define __APPCONFIG_H__
 
 /* C binding of definitions if building with C++ compiler */
 //#ifdef __cplusplus
@@ -40,9 +39,9 @@
 
 /**
  *******************************************************************************
- ** \defgroup WebConfigGroup Web Configuration
+ ** \defgroup AppConfigGroup App Configuration
  **
- ** Provided functions of WebConfig:
+ ** Provided functions of AppConfig:
  **
  **
  *******************************************************************************
@@ -52,10 +51,10 @@
 
 /**
  *******************************************************************************
-** \page webconfig_module_includes Required includes in main application
+** \page appconfig_module_includes Required includes in main application
 ** \brief Following includes are required
 ** @code
-** #include "webconfig.h"
+** #include "appconfig.h"
 ** @endcode
 **
  *******************************************************************************
@@ -68,12 +67,7 @@
  */
 
 #include "stdint.h"
-//#include <Arduino.h>
-#if defined(ARDUINO_ARCH_ESP8266)
-  #include <ESP8266WebServer.h>
-#else
-  #include <WebServer.h>
-#endif
+#include "webconfig.h"
 
 /**
  *******************************************************************************
@@ -81,71 +75,31 @@
  *******************************************************************************
  */
 
+#define APP_VERSION "V1.0.0"
+#define APP_NAME "MYAPP"
+
+#define INITIAL_SSID_STATION_MODE "MyWifi"
+#define INITIAL_PASSWORD_STATION_MODE "MyPassword"
+
+#define INITIAL_WWW_NAME "admin"
+#define INITIAL_WWW_PASS "admin"
+
+
 /**
  *******************************************************************************
  ** Global type definitions ('typedef') 
  *******************************************************************************
  */
 
-typedef enum en_webconfig_type
+typedef struct __attribute__((__packed__)) stc_appconfig
 {
-  enWebConfigTypeStringLen32 = 0xF0,
-  enWebConfigTypeStringLen64 = 0xF1,
-  enWebConfigTypeStringLen128 = 0xF2,
-  enWebConfigTypeUInt8 = 0x01,
-  enWebConfigTypeInt8 = 0x11,
-  enWebConfigTypeUInt16 = 0x02,
-  enWebConfigTypeInt16 = 0x12,
-  enWebConfigTypeUInt32 = 0x04,
-  enWebConfigTypeInt32 = 0x14,
-  enWebConfigTypeUInt64 = 0x08,
-  enWebConfigTypeInt64 = 0x18,
-  enWebConfigTypeBool = 0x21,
-  enWebConfigTypeTime = 0x30,
-  enWebConfigTypeDate = 0x31,
-  enWebConfigTypeDayOfWeek = 0x32
-} en_webconfig_type_t;
-
-typedef struct stc_webconfig_time
-{
-   union {
-       uint16_t u16Data;
-       struct 
-       {
-          uint8_t u8Hours;
-          uint8_t u8Minutes;
-       } Time;
-   };
-} stc_webconfig_time_t;
-
-typedef struct stc_webconfig_date
-{
-   union {
-       uint32_t u32Data;
-       struct 
-       {
-          uint16_t u16Year;
-          uint8_t u8Month;
-          uint8_t u8Day;
-       } Date;
-   };
-} stc_webconfig_date_t;
-
-
-typedef struct stc_webconfig_description
-{
-  const en_webconfig_type_t type; 
-  const char* name;
-  const char* description;
-} stc_webconfig_description_t;
-
-typedef struct stc_webconfig_handle
-{
-    uint8_t* pu8Data;
-    uint32_t u32DataSize;
-    uint32_t ItemCount;
-    stc_webconfig_description_t* astcData;
-} stc_webconfig_handle_t;
+  char ssidStation[32];
+  char passwordStation[32];
+  char wwwUser[32];
+  char wwwPass[32];
+  /*APPVARS_DEFINITION*/
+  uint32_t u32magic;
+} stc_appconfig_t;
 
 /**
  *******************************************************************************
@@ -160,18 +114,28 @@ typedef struct stc_webconfig_handle
  */
 
 #if defined(ARDUINO_ARCH_ESP8266)
-void WebConfig_Init(ESP8266WebServer* pWebServerHandle, stc_webconfig_handle_t* pstcHandle);
+void AppConfig_Init(ESP8266WebServer* pWebServerHandle);
 #else
-void WebConfig_Init(WebServer* pWebServerHandle, stc_webconfig_handle_t* pstcHandle);
+void AppConfig_Init(WebServer* pWebServerHandle);
 #endif
+void AppConfig_Write(void);
+char* AppConfig_GetStaSsid(void);
+char* AppConfig_GetStaPassword(void);
+void AppConfig_SetStaSsid(char* ssid);
+void AppConfig_SetStaPassword(char* pass);
+char* AppConfig_GetWwwUser(void);
+void AppConfig_SetWwwUser(char* WwwUser);
+char* AppConfig_GetWwwPass(void);
+void AppConfig_SetWwwPass(char* WwwPass);
+/*APPFUNC_PROTOTYPES*/
 
-//@} // WebConfigGroup
+//@} // AppConfigGroup
 
 //#ifdef __cplusplus
 //}
 //#endif
 
-#endif /* __WEBCONFIG_H__ */
+#endif /* __APPCONFIG_H__ */
 
 /**
  *******************************************************************************
