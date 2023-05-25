@@ -23,7 +23,7 @@ def main():
     if os.path.basename(projectPath) == "utils":
         projectPath = os.path.join(projectPath,os.pardir)
 
-    htmlFile = os.path.join(projectPath,'htmlfs.cpp')
+    htmlFile = os.path.join(projectPath,"src","wifimcu","htmlfs.cpp")
 
     htmlFsFile = open(htmlFile, 'w') 
     htmlFsFile.write("#include \"htmlfs.h\"\r\n")

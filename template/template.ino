@@ -57,12 +57,11 @@
 #error Not supported architecture
 #endif
 
-
-#include "esp32wifi.h"
-#include "appwebserver.h"
-#include "appconfig.h"
-#include "espwebupdater.h"
-#include "userledbutton.h"
+#include "src/wifimcu/appconfig.h"
+#include "src/wifimcu/esp32wifi.h"
+#include "src/wifimcu/appwebserver.h"
+#include "src/wifimcu/espwebupdater.h"
+#include "src/wifimcu/userledbutton.h"
 
 /**
  *******************************************************************************

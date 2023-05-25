@@ -157,10 +157,10 @@ def main():
         projectPath = os.path.join(projectPath,os.pardir)
 
     appConfigFile = os.path.join(projectPath,"appconfig.json")
-    fname_appconfig_cpp = os.path.join(projectPath,"appconfig.cpp")
-    fname_appconfig_h = os.path.join(projectPath,"appconfig.h")
+    fname_appconfig_cpp = os.path.join(projectPath,"src","wifimcu","appconfig.cpp")
+    fname_appconfig_h = os.path.join(projectPath,"src","wifimcu","appconfig.h")
 
-    distutils.dir_util.copy_tree(templatesPath, projectPath)
+    distutils.dir_util.copy_tree(templatesPath, os.path.join(projectPath,"src","wifimcu"))
 
     # Opening JSON file
     f = open(appConfigFile,)
