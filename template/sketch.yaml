@@ -7,6 +7,7 @@ profiles:
         platform_index_url: http://arduino.esp8266.com/stable/package_esp8266com_index.json
     libraries:
       - ArduinoJson (6.21.1)
+      
   esp32:
     notes: Default profile for Arduino-CI
     fqbn: esp32:esp32:esp32:PartitionScheme=min_spiffs,UploadSpeed=115200
@@ -15,9 +16,21 @@ profiles:
         platform_index_url: https://dl.espressif.com/dl/package_esp32_index.json
     libraries:
       - ArduinoJson (6.21.1)
+
   rp2040:
     notes: Default profile for Arduino-CI
     fqbn: rp2040:rp2040:rpipicow:usbstack=tinyusb,flash=2097152_65536,freq=240,wificountry=germany
+    platforms:
+      - platform: rp2040:rp2040 (3.2.1)
+        platform_index_url: https://github.com/earlephilhower/arduino-pico/releases/download/global/package_rp2040_index.json
+    libraries:
+      - ArduinoJson (6.21.1)
+      - Pico PIO USB (0.5.2)
+      - Adafruit TinyUSB Library (2.2.0)
+
+  rp2040_debug:
+    notes: Default profile for Arduino-CI
+    fqbn: rp2040:rp2040:rpipicow:usbstack=tinyusb,flash=2097152_65536,freq=240,wificountry=germany,opt=Debug
     platforms:
       - platform: rp2040:rp2040 (3.2.1)
         platform_index_url: https://github.com/earlephilhower/arduino-pico/releases/download/global/package_rp2040_index.json

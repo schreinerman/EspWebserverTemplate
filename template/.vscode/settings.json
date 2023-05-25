@@ -6,7 +6,7 @@
     "board_esp32": "esp32:esp32:esp32",
     "board_options_esp32": "PartitionScheme=min_spiffs,UploadSpeed=115200",
     "urls_esp32":"https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_index.json",
-    "board_rp2040": "rp2040:rp2040",
+    "board_rp2040": "rp2040:rp2040:rpipicow",
     "board_options_rp2040": "rpipicow:usbstack=tinyusb,flash=2097152_65536,freq=240,wificountry=germany",
     "urls_rp2040":"https://github.com/earlephilhower/arduino-pico/releases/download/global/package_rp2040_index.json",
 }

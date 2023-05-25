@@ -21,7 +21,7 @@
         {
             "label": "build: esp8266",
             "type": "shell",
-            "command": "arduino-cli compile --build-path \"${config:build_path}\" --profile esp8266",
+            "command": "make esp8266",
             "dependsOn":["utilities: Update AppConfig","utilities: Update Favicon","utilities: Update Web Content"]
         },
         {
@@ -32,7 +32,7 @@
         {
             "label": "build: esp32",
             "type": "shell",
-            "command": "arduino-cli compile --build-path \"${config:build_path}\" --profile esp32",
+            "command": "make esp32",
             "dependsOn":["utilities: Update AppConfig","utilities: Update Favicon","utilities: Update Web Content"]
         },
         {
@@ -43,13 +43,39 @@
         {
             "label": "build: rp2040",
             "type": "shell",
-            "command": "arduino-cli compile --build-path \"${config:build_path}\" --profile rp2040",
+            "command": "make rp2040",
+            "dependsOn":["utilities: Update AppConfig","utilities: Update Favicon","utilities: Update Web Content"]
+        },
+        {
+            "label": "build: rp2040 debug",
+            "type": "shell",
+            "command": "make rp2040_debug",
             "dependsOn":["utilities: Update AppConfig","utilities: Update Favicon","utilities: Update Web Content"]
         },
         {
             "label": "print: rp2040 options",
             "type": "shell",
             "command": "arduino-cli board details -b ${config:board_rp2040}"
-        }
+        },
+        {
+            "label": "install: gdb-server (Linux / macOS)",
+            "type": "shell",
+            "osx":{
+                "command":"brew install armmbed/formulae/arm-none-eabi-gcc"
+            },
+            "linux":{
+                "command":"sudo apt update && sudo apt install gcc-arm-none-eabi "
+            }
+        },
+        {
+            "label": "install: Python requirements",
+            "type": "shell",
+            "osx":{
+                "command":"brew install armmbed/formulae/arm-none-eabi-gcc"
+            },
+            "linux":{
+                "command":"sudo apt update && sudo apt install gcc-arm-none-eabi "
+            }
+        },
     ]
 }

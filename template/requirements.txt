@@ -2,3 +2,4 @@ htmlmin
 imageio
 Pillow
 pilkit
+pyocd

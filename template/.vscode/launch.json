@@ -1,0 +1,20 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "cwd": "${workspaceFolder}",
+        "executable": "./build/rp2040_debug.elf",
+        "name": "Debug RP2040 with PyOCD",
+        "request": "launch",
+        "type": "cortex-debug",
+        "runToEntryPoint": "main",
+        "showDevDebugOutput": "none",
+        "servertype": "pyocd",
+        "serverArgs": ["-f","4000000","--target","rp2040"],
+        "preLaunchTask": "build: rp2040 debug"
+      }
+    ]
+  }
+  

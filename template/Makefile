@@ -23,7 +23,6 @@ esp8266 esp32:
 
 	mkdir -p "$(release_path)"
 	$(eval BINFILE := $(wildcard ${build_path}/*.ino.bin))
-#	$(eval NAME := $(notdir $(basename $(basename ${BINFILE}))))
 
 	mv "./$(build_path)/"*.ino.bin "./$(release_path)/firmware-v$(version_info)_$@_$(project_name).bin"
 
@@ -35,6 +34,15 @@ rp2040:
 	$(eval BINFILE := $(wildcard ${build_path}/*.ino.uf2))
 
 	mv "./$(build_path)/"*.ino.uf2 "./$(release_path)/firmware-v$(version_info)_$@_$(project_name).uf2"
+
+rp2040_debug:
+	arduino-cli core install rp2040:rp2040
+	arduino-cli compile --build-path "$(build_path)" --profile $@
+
+	mkdir -p "$(release_path)"
+	$(eval BINFILE := $(wildcard ${build_path}/*.ino.elf))
+
+	cp "./$(build_path)/"*.ino.elf "./$(build_path)/rp2040_debug.elf"
 
 clean:
 	mkdir -p build
