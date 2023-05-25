@@ -58,9 +58,9 @@
 #endif
 
 #include "src/wifimcu/appconfig.h"
-#include "src/wifimcu/esp32wifi.h"
+#include "src/wifimcu/wifimcuctrl.h"
 #include "src/wifimcu/appwebserver.h"
-#include "src/wifimcu/espwebupdater.h"
+#include "src/wifimcu/wifimcuwebupdater.h"
 #include "src/wifimcu/userledbutton.h"
 
 /**
@@ -142,7 +142,7 @@ void setup() {
   #endif
   
   Serial.println("Trying to connect with accesspoint (can take a while)...");
-  Esp32Wifi_DualModeInit((char*)AppConfig_GetStaSsid(),(char*)AppConfig_GetStaPassword(),ssidAp,passwordAp);
+  WifiMcuCtrl_DualModeInit((char*)AppConfig_GetStaSsid(),(char*)AppConfig_GetStaPassword(),ssidAp,passwordAp);
                                                                   
   Serial.println("");
   Serial.print("IP address: ");
@@ -152,7 +152,7 @@ void setup() {
     Serial.println("MDNS responder started");
   }
   
-  EspWebUpdater_Init(&webServer);
+  WifiMcuWebUpdater_Init(&webServer);
   
   AppWebServer_Init(&webServer);
   
@@ -210,7 +210,7 @@ void loop() {
   MDNS.update();
   #endif
   AppWebServer_Update();
-  Esp32Wifi_Update();
+  WifiMcuCtrl_Update();
   AppWebServer_Update();
 
   if (u32LastMillis != millis())

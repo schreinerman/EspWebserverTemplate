@@ -17,11 +17,11 @@
 
 /**
  *******************************************************************************
- **\file espwebupdater.c
+ **\file wifimcuwebupdater.c
  **
  ** Website Update Service located at http://<IP>/firmware
  ** A detailed description is available at
- ** @link EspWebUpdaterGroup file description @endlink
+ ** @link WifiMcuWebUpdaterGroup file description @endlink
  **
  ** History:
  ** - 2021-2-20  1.00  Manuel Schreiner
@@ -29,7 +29,7 @@
  *******************************************************************************
  */
 
-#define __ESPWEBUPDATER_C__
+#define __WIFIMCUWEBUPDATER_C__
 
 /**
  *******************************************************************************
@@ -40,7 +40,7 @@
 #include <Arduino.h>
 #include "appconfig.h"
 #include <stdint.h>
-#include "espwebupdater.h"
+#include "wifimcuwebupdater.h"
 #include "StreamString.h"
 #if defined(ARDUINO_ARCH_ESP8266)
 #include <ESP8266WebServer.h>
@@ -143,9 +143,9 @@ static const PLACE_IROM char successResponse[] = "<META http-equiv=\"refresh\" c
  ********************************************* 
  */
 #if defined(ARDUINO_ARCH_ESP8266)
-  void EspWebUpdater_Init(ESP8266WebServer* _pWebServer)
+  void WifiMcuWebUpdater_Init(ESP8266WebServer* _pWebServer)
 #else
-  void EspWebUpdater_Init(WebServer* _pWebServer)
+  void WifiMcuWebUpdater_Init(WebServer* _pWebServer)
 #endif
 {
   pWebServer = _pWebServer;

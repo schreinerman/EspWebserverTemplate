@@ -17,20 +17,20 @@
 
 /**
  *******************************************************************************
- **\file espwebupdater.c
+ **\file wifimcuctrl.c
  **
- ** Website Update Service
+ ** Handle WiFi
  ** A detailed description is available at
- ** @link EspWebUpdaterGroup file description @endlink
+ ** @link ESP32WifiGroup file description @endlink
  **
  ** History:
- ** - 2021-2-20  1.00  Manuel Schreiner
+ ** - 2021-1-2  1.00  Manuel Schreiner
  ** - 2023-05-24 1.10 Manuel Schreiner - Adding RP2040 / Raspberry Pi Pico W Support
  *******************************************************************************
  */
 
-#if !defined(__ESPWEBUPDATER_H__)
-#define __ESPWEBUPDATER_H__
+#if !defined(__WIFIMCUCTRL_H__)
+#define __WIFIMCUCTRL_H__
 
 /* C binding of definitions if building with C++ compiler */
 //#ifdef __cplusplus
@@ -40,9 +40,9 @@
 
 /**
  *******************************************************************************
- ** \defgroup EspWebUpdaterGroup Website Update Service
+ ** \defgroup ESP32WifiGroup Handle WiFi
  **
- ** Provided functions of EspWebUpdater:
+ ** Provided functions of ESP32Wifi:
  **
  **
  *******************************************************************************
@@ -52,10 +52,10 @@
 
 /**
  *******************************************************************************
-** \page espwebupdater_module_includes Required includes in main application
+** \page wifimcuctrl_module_includes Required includes in main application
 ** \brief Following includes are required
 ** @code
-** #include "espwebupdater.h"
+** #include "wifimcuctrl.h"
 ** @endcode
 **
  *******************************************************************************
@@ -68,18 +68,7 @@
  */
 
 #include <stdint.h>
-#if defined(ARDUINO_ARCH_ESP8266)
-  #include <ESP8266WiFi.h>
-#else
-  #include <WiFi.h>
-#endif
-#include <WiFiClient.h>
-#if defined(ARDUINO_ARCH_ESP8266)
-  #include <ESP8266WebServer.h>
-  #include <uri/UriBraces.h>
-#else
-  #include <WebServer.h>
-#endif
+
 /**
  *******************************************************************************
  ** Global pre-processor symbols/macros ('#define') 
@@ -92,7 +81,11 @@
  *******************************************************************************
  */
 
-
+typedef enum en_wifi_mcu_ctrl_mode
+{
+  enESP32WifiModeSoftAP = 0,
+  enESP32WifiModeStation = 1
+} en_wifi_mcu_ctrl_mode_t;
 
 /**
  *******************************************************************************
@@ -106,20 +99,20 @@
  *******************************************************************************
  */
 
+void WifiMcuCtrl_Init(en_wifi_mcu_ctrl_mode_t mode, const char* ssid, const char* password);
+void WifiMcuCtrl_DualModeInit(const char* ssidStation, const char* passwordStation, const char* ssidAp, const char* passwordAp);
+void WifiMcuCtrl_Connect(void);
+void WifiMcuCtrl_Update(void);
+void WifiMcuCtrl_KeepAlive(void);
+void WifiMcuCtrl_SetSleepTime(uint32_t u32SleepTime);
 
-#if defined(ARDUINO_ARCH_ESP8266)
-  void EspWebUpdater_Init(ESP8266WebServer* pWebServer);
-#else
-  void EspWebUpdater_Init(WebServer* pWebServer);
-#endif
-
-//@} // EspWebUpdaterGroup
+//@} // ESP32WifiGroup
 
 //#ifdef __cplusplus
 //}
 //#endif
 
-#endif /* __ESPWEBUPDATER_H__ */
+#endif /* __WIFIMCUCTRL_H__ */
 
 /**
  *******************************************************************************

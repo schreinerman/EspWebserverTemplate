@@ -46,7 +46,7 @@
 #include "appconfig.h"
 #include "appwebserver.h"
 #include "htmlfs.h"
-#include "esp32wifi.h"
+#include "wifimcuctrl.h"
 
 
 /**
@@ -107,7 +107,7 @@ static WebServer* pServer;
   pServer = pWebServer;
 
   pServer->on("/cmd/keepalive", []() {
-      Esp32Wifi_KeepAlive();
+      WifiMcuCtrl_KeepAlive();
       pServer->send(200, "text/plain", "keep alive accepted");
   });
 

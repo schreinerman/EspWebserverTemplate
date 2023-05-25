@@ -15,7 +15,7 @@ def main():
     strInitScript += "{\r\n"
     strInitScript += "    _pServer = pServer;\r\n"
     strInitScript += "    _pServer->on(\"/\", []() {\r\n"
-    strInitScript += "        Esp32Wifi_KeepAlive();\r\n"
+    strInitScript += "        WifiMcuCtrl_KeepAlive();\r\n"
     strInitScript += "        _pServer->send(200, \"text/html\", (char*)au8index_html);\r\n"
     strInitScript += "    });\r\n"
 
@@ -27,7 +27,7 @@ def main():
 
     htmlFsFile = open(htmlFile, 'w') 
     htmlFsFile.write("#include \"htmlfs.h\"\r\n")
-    htmlFsFile.write("#include \"esp32wifi.h\"\r\n")
+    htmlFsFile.write("#include \"wifimcuctrl.h\"\r\n")
     htmlFsFile.write("#include <stdint.h>\r\n")
     htmlFsFile.write("#include <Arduino.h>\r\n")
     htmlFsFile.write("#if defined(ARDUINO_ARCH_ESP8266)\r\n")
@@ -60,7 +60,7 @@ def main():
 
                 strFileName = fileName[5:]
                 strInitScript += "    _pServer->on(\"/" + strFileName + "\", []() {\r\n"
-                strInitScript += "        Esp32Wifi_KeepAlive();\r\n"
+                strInitScript += "        WifiMcuCtrl_KeepAlive();\r\n"
                 strFileName = strFileName.replace("/","_")
                 strFileName = strFileName.replace(".","_")
                 strFileName = strFileName.replace("-","_")

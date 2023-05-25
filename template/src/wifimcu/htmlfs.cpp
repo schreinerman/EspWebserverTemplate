@@ -1,5 +1,5 @@
 #include "htmlfs.h"
-#include "esp32wifi.h"
+#include "wifimcuctrl.h"
 #include <stdint.h>
 #include <Arduino.h>
 #if defined(ARDUINO_ARCH_ESP8266)
@@ -381,63 +381,63 @@ const PLACE_IROM uint8_t au8favicon_32x32_png[1417] = {0x89, 0x50, 0x4e, 0x47, 0
 {
     _pServer = pServer;
     _pServer->on("/", []() {
-        Esp32Wifi_KeepAlive();
+        WifiMcuCtrl_KeepAlive();
         _pServer->send(200, "text/html", (char*)au8index_html);
     });
     _pServer->on("/favicon-16x16.png", []() {
-        Esp32Wifi_KeepAlive();
+        WifiMcuCtrl_KeepAlive();
         _pServer->send_P(200, "image/png", (char*)au8favicon_16x16_png,873);
     });
     _pServer->on("/safari-pinned-tab.svg", []() {
-        Esp32Wifi_KeepAlive();
+        WifiMcuCtrl_KeepAlive();
         _pServer->send_P(200, "image/svg", (char*)au8safari_pinned_tab_svg,642);
     });
     _pServer->on("/favicon.ico", []() {
-        Esp32Wifi_KeepAlive();
+        WifiMcuCtrl_KeepAlive();
         _pServer->send_P(200, "image/ico", (char*)au8favicon_ico,15086);
     });
     _pServer->on("/index.html", []() {
-        Esp32Wifi_KeepAlive();
+        WifiMcuCtrl_KeepAlive();
         _pServer->send(200, "text/html", (char*)au8index_html);
     });
     _pServer->on("/android-chrome-192x192.png", []() {
-        Esp32Wifi_KeepAlive();
+        WifiMcuCtrl_KeepAlive();
         _pServer->send_P(200, "image/png", (char*)au8android_chrome_192x192_png,6204);
     });
     _pServer->on("/apple-touch-icon.png", []() {
-        Esp32Wifi_KeepAlive();
+        WifiMcuCtrl_KeepAlive();
         _pServer->send_P(200, "image/png", (char*)au8apple_touch_icon_png,5807);
     });
     _pServer->on("/android-chrome-256x256.png", []() {
-        Esp32Wifi_KeepAlive();
+        WifiMcuCtrl_KeepAlive();
         _pServer->send_P(200, "image/png", (char*)au8android_chrome_256x256_png,8504);
     });
     _pServer->on("/android-chrome-512x512.png", []() {
-        Esp32Wifi_KeepAlive();
+        WifiMcuCtrl_KeepAlive();
         _pServer->send_P(200, "image/png", (char*)au8android_chrome_512x512_png,11283);
     });
     _pServer->on("/site.webmanifest", []() {
-        Esp32Wifi_KeepAlive();
+        WifiMcuCtrl_KeepAlive();
         _pServer->send(200, "text/plain", (char*)au8site_webmanifest);
     });
     _pServer->on("/site.css", []() {
-        Esp32Wifi_KeepAlive();
+        WifiMcuCtrl_KeepAlive();
         _pServer->send(200, "text/plain", (char*)au8site_css);
     });
     _pServer->on("/mstile-150x150.png", []() {
-        Esp32Wifi_KeepAlive();
+        WifiMcuCtrl_KeepAlive();
         _pServer->send_P(200, "image/png", (char*)au8mstile_150x150_png,3176);
     });
     _pServer->on("/browserconfig.xml", []() {
-        Esp32Wifi_KeepAlive();
+        WifiMcuCtrl_KeepAlive();
         _pServer->send(200, "text/xml", (char*)au8browserconfig_xml);
     });
     _pServer->on("/steinplatte.jpg", []() {
-        Esp32Wifi_KeepAlive();
+        WifiMcuCtrl_KeepAlive();
         _pServer->send_P(200, "image/jpeg", (char*)au8steinplatte_jpg,301);
     });
     _pServer->on("/favicon-32x32.png", []() {
-        Esp32Wifi_KeepAlive();
+        WifiMcuCtrl_KeepAlive();
         _pServer->send_P(200, "image/png", (char*)au8favicon_32x32_png,1417);
     });
 }

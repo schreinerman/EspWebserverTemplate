@@ -17,7 +17,7 @@
 
 /**
  *******************************************************************************
- **\file esp32wifi.c
+ **\file wifimcuctrl.c
  **
  ** Handle WiFi
  ** A detailed description is available at
@@ -29,7 +29,7 @@
  *******************************************************************************
  */
 
-#define __ESP32WIFI_C__
+#define __WIFIMCUCTRL_C__
 
 /**
  *******************************************************************************
@@ -37,7 +37,7 @@
  *******************************************************************************
  */
 
-#include "esp32wifi.h"
+#include "wifimcuctrl.h"
 #include <DNSServer.h>
 
 #if defined(ARDUINO_ARCH_ESP8266)
@@ -94,7 +94,7 @@ static char* _passwordApMode;
 
 static uint32_t u32TimeToSleepSeconds = TIME_TO_SLEEP;
 
-static en_esp32_wifi_mode_t _mode = enESP32WifiModeSoftAP;
+static en_wifi_mcu_ctrl_mode_t _mode = enESP32WifiModeSoftAP;
 
 /**
  *******************************************************************************
@@ -163,7 +163,7 @@ static void WiFiConnect(void)
  * \param password  WiFi Password
  * 
  */
-void Esp32Wifi_Init(en_esp32_wifi_mode_t mode, const char* ssid, const char* password)
+void WifiMcuCtrl_Init(en_wifi_mcu_ctrl_mode_t mode, const char* ssid, const char* password)
 {
     _mode = mode;
     _ssidStationMode = (char*)ssid;
@@ -173,7 +173,7 @@ void Esp32Wifi_Init(en_esp32_wifi_mode_t mode, const char* ssid, const char* pas
     #if defined(ARDUINO_ARCH_ESP32) //only available with ESP32
         esp_sleep_enable_timer_wakeup(u32TimeToSleepSeconds * uS_TO_S_FACTOR); // ESP32 wakes up every 5 seconds
     #endif
-    Esp32Wifi_Connect();
+    WifiMcuCtrl_Connect();
 }
 
 /**
@@ -188,7 +188,7 @@ void Esp32Wifi_Init(en_esp32_wifi_mode_t mode, const char* ssid, const char* pas
  * \param passwordAp       WiFi Password for AP Mode
  * 
  */
-void Esp32Wifi_DualModeInit(const char* ssidStation, const char* passwordStation, const char* ssidAp, const char* passwordAp)
+void WifiMcuCtrl_DualModeInit(const char* ssidStation, const char* passwordStation, const char* ssidAp, const char* passwordAp)
 {
     _ssidStationMode = (char*)ssidStation;
     _passwordStationMode = (char*)passwordStation;
@@ -213,7 +213,7 @@ void Esp32Wifi_DualModeInit(const char* ssidStation, const char* passwordStation
         Serial.println("Initializing AP mode...");
         _mode = enESP32WifiModeSoftAP;
         WiFi.disconnect();
-        Esp32Wifi_Connect();
+        WifiMcuCtrl_Connect();
         return;
     }
     #endif
@@ -232,13 +232,13 @@ void Esp32Wifi_DualModeInit(const char* ssidStation, const char* passwordStation
            Serial.println("Initializing AP mode...");
            _mode = enESP32WifiModeSoftAP;
            WiFi.disconnect();
-           Esp32Wifi_Connect();
+           WifiMcuCtrl_Connect();
            return;
         }
     }
     Serial.println("STA Connected...");
     _mode = enESP32WifiModeStation;
-    Esp32Wifi_Connect();
+    WifiMcuCtrl_Connect();
 }
 
 /*
@@ -301,7 +301,7 @@ static void ConnectSoftAP(void)
 /*
  * Connect to AP / create an AP
  */
-void Esp32Wifi_Connect(void)
+void WifiMcuCtrl_Connect(void)
 {
     switch(_mode)
     {
@@ -323,7 +323,7 @@ void Esp32Wifi_Connect(void)
 /*
  * Update in loop, so ESP32 can be put to sleep mode in station mode
  */
-void Esp32Wifi_Update(void)
+void WifiMcuCtrl_Update(void)
 {
     uint32_t u32Diff = millis();
     if (u32Diff < millisOld)
@@ -369,13 +369,13 @@ void Esp32Wifi_Update(void)
            
         }
         //Serial.println("wake");
-        Esp32Wifi_Connect();
+        WifiMcuCtrl_Connect();
         u32Counter = ((TIMEOUT_SLEEP-TIME_TO_WAKE)*1000);
     }
     #endif
 }
 
-void Esp32Wifi_SetSleepTime(uint32_t u32SleepTime)
+void WifiMcuCtrl_SetSleepTime(uint32_t u32SleepTime)
 {
   if (u32TimeToSleepSeconds != u32SleepTime)
   {
@@ -389,7 +389,7 @@ void Esp32Wifi_SetSleepTime(uint32_t u32SleepTime)
 /*
  * Execute to keep WiFi alive
  */
-void Esp32Wifi_KeepAlive(void)
+void WifiMcuCtrl_KeepAlive(void)
 {
     u32Counter = 0;
     u32StationReboot = 0;
