@@ -1,20 +1,64 @@
 {
-    // Use IntelliSense to learn about possible attributes.
-    // Hover to view descriptions of existing attributes.
-    "version": "0.2.0",
-    "configurations": [
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  "version": "0.2.0",
+  "configurations": [
       {
-        "cwd": "${workspaceFolder}",
+        "name": "RP2040 OpenOCD Debug",
+        "cwd": "${workspaceRoot}",
         "executable": "./build/rp2040_debug.elf",
-        "name": "Debug RP2040 with PyOCD",
         "request": "launch",
         "type": "cortex-debug",
-        "runToEntryPoint": "main",
-        "showDevDebugOutput": "none",
-        "servertype": "pyocd",
-        "serverArgs": ["-f","4000000","--target","rp2040"],
-        "preLaunchTask": "build: rp2040 debug"
+        "servertype": "openocd",
+        "preLaunchTask": "build: rp2040 debug",
+        // This may need to be arm-none-eabi-gdb depending on your system
+        "gdbPath" : "arm-none-eabi-gdb",
+        "device": "RP2040",
+        "numberOfProcessors": 2,
+        "targetProcessor": 0,
+        "openOCDPreConfigLaunchCommands": ["adapter speed 4000"],
+        "configFiles": [
+            "interface/cmsis-dap.cfg",
+            "target/rp2040.cfg"
+        ],
+        "svdFile": "rp2040.svd",
+        // Work around for stopping at main on restart
+        "postRestartCommands": [
+            "break main",
+            "continue"
+        ],
+        "chainedConfigurations": {
+          "enabled": true,
+          "waitOnEvent": "postInit",
+          "detached": false,                         // Set this to true for JLink/STLink, false for most other type servers
+          "lifecycleManagedByParent": true,
+          "launches": [                              // Array of launches. Order is respected
+              {
+                  "name": "RP2040 Attatch Debug (core1)",     // Name of another configuration
+              }
+          ]
       }
-    ]
-  }
-  
+    },
+    {
+      "name": "RP2040 Attatch Debug (core1)",
+      "cwd": "${workspaceRoot}",
+      "executable": "./build/rp2040_debug.elf",
+      "request": "attach",
+      "type": "cortex-debug",
+      "servertype": "external",
+      "gdbTarget": "localhost:50001",
+      // This may need to be arm-none-eabi-gdb depending on your system
+      "gdbPath" : "arm-none-eabi-gdb",
+      "device": "RP2040",
+      "numberOfProcessors": 2,
+      "targetProcessor": 1,
+      "svdFile": "rp2040.svd",
+      // Work around for stopping at main on restart
+      "postRestartCommands": [
+          "break main",
+          "continue"
+      ],
+    },
+
+  ]
+}
