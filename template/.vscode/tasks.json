@@ -4,103 +4,193 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label":"utilities: Update Web Content",
+            "label": "utilities: Update Web Content",
             "type": "shell",
-            "command": "python3 utils/update-webstore.py"
+            "command": "python3 utils/update-webstore.py",
+            "windows": {
+                "command": "wsl python3 utils/update-webstore.py",
+            },
+            "presentation": {
+                "reveal": "silent",
+                "clear": true
+            }
         },
         {
-            "label":"utilities: Update Favicon",
+            "label": "utilities: Update Favicon",
             "type": "shell",
-            "command": "python3 utils/update-favicon.py"
+            "command": "python3 utils/update-favicon.py",
+            "windows": {
+                "command": "wsl python3 utils/update-favicon.py",
+            },
+            "presentation": {
+                "reveal": "silent",
+                "clear": true
+            }
         },
         {
-            "label":"utilities: Update AppConfig",
+            "label": "utilities: Update AppConfig",
             "type": "shell",
-            "command": "python3 utils/update-appconfig.py"
+            "command": "python3 utils/update-appconfig.py",
+            "windows": {
+                "command": "wsl python3 utils/update-appconfig.py",
+            },
+            "presentation": {
+                "reveal": "silent",
+                "clear": true
+            }
         },
         {
             "label": "build: esp8266",
             "type": "shell",
             "command": "make esp8266",
-            "dependsOn":["utilities: Update AppConfig","utilities: Update Favicon","utilities: Update Web Content"]
+            "windows": {
+                "command": "wsl make esp8266",
+            },
+            "dependsOn": [
+                "utilities: Update AppConfig",
+                "utilities: Update Favicon",
+                "utilities: Update Web Content"
+            ],
+            "dependsOrder": "sequence"
         },
         {
             "label": "print: esp8266 options",
             "type": "shell",
-            "command": "arduino-cli board details -b ${config:board_esp8266}"
+            "command": "arduino-cli board details -b ${config:board_esp8266}",
+            "windows": {
+                "command": "wsl arduino-cli board details -b ${config:board_esp8266}",
+            }
         },
         {
             "label": "build: esp32",
             "type": "shell",
             "command": "make esp32",
-            "dependsOn":["utilities: Update AppConfig","utilities: Update Favicon","utilities: Update Web Content"]
+            "windows": {
+                "command": "wsl make esp32",
+            },
+            "dependsOn": [
+                "utilities: Update AppConfig",
+                "utilities: Update Favicon",
+                "utilities: Update Web Content"
+            ],
+            "dependsOrder": "sequence"
         },
         {
             "label": "print: esp32 options",
             "type": "shell",
-            "command": "arduino-cli board details -b ${config:board_esp32}"
+            "command": "arduino-cli board details -b ${config:board_esp32}",
+            "windows": {
+                "command": "wsl arduino-cli board details -b ${config:board_esp32}",
+            }
         },
         {
             "label": "build: rp2040",
             "type": "shell",
             "command": "make rp2040",
-            "dependsOn":["utilities: Update AppConfig","utilities: Update Favicon","utilities: Update Web Content"]
+            "windows": {
+                "command": "wsl make rp2040",
+            },
+            "dependsOn": [
+                "utilities: Update AppConfig",
+                "utilities: Update Favicon",
+                "utilities: Update Web Content"
+            ],
+            "dependsOrder": "sequence"
         },
         {
             "label": "build: rp2040 debug",
             "type": "shell",
             "command": "make rp2040_debug",
-            "dependsOn":["utilities: Update AppConfig","utilities: Update Favicon","utilities: Update Web Content"]
+            "windows": {
+                "command": "wsl make rp2040_debug",
+            },
+            "dependsOn": [
+                "utilities: Update AppConfig",
+                "utilities: Update Favicon",
+                "utilities: Update Web Content"
+            ],
+            "dependsOrder": "sequence"
         },
         {
             "label": "print: rp2040 options",
             "type": "shell",
-            "command": "arduino-cli board details -b ${config:board_rp2040}"
-        },
-        {
-            "label": "install: gdb-server (Linux / macOS)",
-            "type": "shell",
-            "osx":{
-                "command":"brew install armmbed/formulae/arm-none-eabi-gcc"
-            },
-            "linux":{
-                "command":"sudo apt update && sudo apt install gcc-arm-none-eabi "
+            "command": "arduino-cli board details -b ${config:board_rp2040}",
+            "windows": {
+                "command": "wsl arduino-cli board details -b ${config:board_rp2040}",
             }
-        },
-        {
-            "label": "install: Enable WSL",
-            "type": "shell",
-            "windows":{
-                "options": {
-                    "shell": {
-                        "executable": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
-                        "args": [
-                            "-NoProfile",
-                            "-ExecutionPolicy",
-                            "Bypass",
-                            "-Command"
-                        ]
-                    }
-                },
-                "command":"Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Windows-Subsystem-Linux"
-            },
         },
         {
             "label": "install: Install WSL Ubuntu",
             "type": "shell",
-            "windows":{
-                "command":"wsl --install Ubuntu"
+            "command":"echo nothing to do...",
+            "windows": {
+                "command": "wsl --install Ubuntu"
             },
-        },
-        {
-            "label": "install: Python requirements",
-            "type": "shell",
-            "osx":{
-                "command":"brew install armmbed/formulae/arm-none-eabi-gcc"
-            },
-            "linux":{
-                "command":"sudo apt update && sudo apt install gcc-arm-none-eabi "
+            "presentation": {
+                "reveal": "silent",
+                "clear": true
             }
         },
+        {
+            "label": "install: Software",
+            "type": "shell",
+            "osx": {
+                "command": "brew install armmbed/formulae/arm-none-eabi-gcc python3 pipx make || true"
+            },
+            "linux": {
+                "command": "sudo apt update && sudo apt install -y gcc-arm-none-eabi curl wget bzip2 tar ca-certificates make python3 python3-pip"
+            },
+            "windows": {
+                "command": "wsl sudo apt update `&`& sudo apt -y install gcc-arm-none-eabi curl wget bzip2 tar ca-certificates make python3 python3-pip"
+            },
+            "presentation": {
+                "reveal": "silent",
+                "clear": true
+            }
+        },
+        {
+            "label": "install: Arduino-CLI",
+            "type": "shell",
+            "osx": {
+                "command": "brew install arduino-cli || true && arduino-cli config init --overwrite"
+            },
+            "linux": {
+                "command": "curl -fsSL https://raw.githubusercontent.com/arduino/arduino-cli/master/install.sh | sudo BINDIR=/usr/bin sh && arduino-cli config init --overwrite"
+            },
+            "windows": {
+                "command": "wsl curl -fsSL https://raw.githubusercontent.com/arduino/arduino-cli/master/install.sh `| sudo BINDIR=/usr/bin sh `&`& arduino-cli config init --overwrite"
+            },
+            "presentation": {
+                "reveal": "silent",
+                "clear": true
+            }
+        },
+        {
+            "label": "install: Python Requirements",
+            "type": "shell",
+            "osx": {
+                "command": "pip3 install -r requirements.txt"
+            },
+            "linux": {
+                "command": "pip3 install -r requirements.txt"
+            },
+            "windows": {
+                "command": "wsl pip3 install -r requirements.txt"
+            },
+            "presentation": {
+                "reveal": "silent",
+                "clear": true
+            }
+        },
+        {
+            "label": "install: All",
+            "type": "shell",
+            "dependsOn": [
+                "install: Software",
+                "install: Python Requirements",
+                "install: Arduino-CLI"
+            ],
+            "dependsOrder": "sequence"
+        }
     ]
 }
