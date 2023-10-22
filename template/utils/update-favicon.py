@@ -44,10 +44,16 @@ def updateFavicon(originalImage, directory):
         background.paste(
             result, (int((size[2][0] - result.size[0]) / 2), int((size[2][1] - result.size[1]) / 2))
         )
-        
-        background.save(os.path.join(directory ,size[0] + ".png"))
+        background = background.convert("P", palette=Image.ADAPTIVE, colors=256)
+        background.save(os.path.join(directory ,size[0] + ".png"), optimize=True)
 
     img = imageio.v2.imread(originalImage)
+    processor = ProcessorPipeline([ResizeToFit(48, 48)])
+    result = processor.process(im)
+    img = Image.new('RGBA', [48,48], (255, 255, 255, 0))
+    img.paste(
+        result, (int((48 - result.size[0]) / 2), int((48 - result.size[1]) / 2))
+    )
     parentDir = os.path.abspath(os.path.join(directory, os.pardir))
     imageio.imwrite(os.path.join(parentDir ,'favicon.ico'), img)
 
