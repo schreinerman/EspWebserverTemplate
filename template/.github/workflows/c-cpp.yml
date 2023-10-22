@@ -1,0 +1,27 @@
+name: C/C++ CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: configure
+      run: |
+        sudo chmod +x ./build.sh
+        ./build.sh prepare
+      shell: bash
+    - name: make
+      run: ./build.sh build
+    - uses: actions/upload-artifact@v3
+      with:
+        name: maerklin293xx-gw-app
+        path: release/*
+      
