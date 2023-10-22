@@ -10,21 +10,14 @@ variables:
   DOCKER_TLS_CERTDIR: ""
 
 before_script:
-  - apt-get update && apt-get install -y curl wget bzip2 tar ca-certificates make python3 python3-pip
-  - curl -fsSL https://raw.githubusercontent.com/arduino/arduino-cli/master/install.sh | BINDIR=/usr/bin sh
-  - touch /root/.arduino15/package_esp8266com_index.json
-  - arduino-cli config init
-  - arduino-cli config add board_manager.additional_urls "http://arduino.esp8266.com/stable/package_esp8266com_index.json"
-  - arduino-cli config add board_manager.additional_urls "https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_index.json"
-  - arduino-cli config add board_manager.additional_urls "https://github.com/earlephilhower/arduino-pico/releases/download/global/package_rp2040_index.json"
-  - arduino-cli update
   - chmod +x ./build.sh
+  - ./build.sh prepare
 
 
 build_service:
   stage: build
   script:
-    - sh ./build.sh build
+    - ./build.sh build
   artifacts:
     paths:
       - release
@@ -35,6 +28,6 @@ build_service:
 test_service:
   stage: test
   script:
-    - sh ./build.sh test
+    - ./build.sh test
   only:
     - main
